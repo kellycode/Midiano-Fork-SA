@@ -27,7 +27,6 @@ export class DomHelper {
         });
     }
     static removeClass(className, element) {
-        console.log(element);
         if (element.classList.contains(className)) {
             element.classList.remove(className);
         }

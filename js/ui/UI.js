@@ -68,8 +68,8 @@ export class UI {
         let fileGrp = this.getFileButtonGroupNew();
         let trackGrp = this.getTracksButtonGroup();
 
-        DomHelper.addClassToElements("align-middle", [fileGrp, songSpeedGrp, songControlGrp, volumeGrp, trackGrp]);
-        DomHelper.appendChildren(leftTop, [fileGrp, trackGrp]);
+        DomHelper.addClassToElements("align-middle", [songSpeedGrp, songControlGrp, volumeGrp, trackGrp]);
+        DomHelper.appendChildren(leftTop, [trackGrp]);
 
         // zoom buttons added to the middleTopContainer
         let zoomGroup = new ZoomUI().getContentDiv(this.render);
@@ -131,11 +131,8 @@ export class UI {
 
     getTracksButtonGroup() {
         let trackGrp = DomHelper.createButtonGroup(true);
-        DomHelper.appendChildren(trackGrp, [
-            this.getTracksButton(),
-            this.getMidiSetupButton(),
-            // this.getChannelsButton()
-        ]);
+        //let trackGrp = DomHelper.createElement("div", { justifyContent: "space-around" }, { className: "btn-group btn-group-vertical", role: "group" })
+        DomHelper.appendChildren(trackGrp, [this.getTracksButton(), this.getMidiSetupButton()]);
         return trackGrp;
     }
 
@@ -171,15 +168,24 @@ export class UI {
 
     toggleLoadedSongsDiv() {
         if (this.loadedSongsShown) {
-            this.loadedSongsButton.classList.remove("selected");
-            this.loadedSongsShown = false;
-            this.hideDiv(this.getLoadedSongsDiv());
+            this.hideLoadedSongsDiv();
         } else {
             this.hideAllDialogs();
-            this.loadedSongsButton.classList.add("selected");
-            this.loadedSongsShown = true;
-            this.showDiv(this.getLoadedSongsDiv());
+            this.showLoadedSongsDiv();
         }
+    }
+
+    showLoadedSongsDiv() {
+        this.hideAllDialogs();
+        this.loadedSongsButton.classList.add("selected");
+        this.loadedSongsShown = true;
+        this.showDiv(this.getLoadedSongsDiv());
+    }
+
+    hideLoadedSongsDiv() {
+        this.loadedSongsButton.classList.remove("selected");
+        this.loadedSongsShown = false;
+        this.hideDiv(this.getLoadedSongsDiv());
     }
 
     handleFileSelect(evt) {
@@ -199,6 +205,7 @@ export class UI {
     getNavBar() {
         return document.getElementById("MainNavBar");
     }
+
     getSettingsButton() {
         if (!this.settingsButton) {
             this.settingsButton = DomHelper.createGlyphiconButton("settingsButton", "cog", () => {
@@ -211,19 +218,23 @@ export class UI {
         }
         return this.settingsButton;
     }
+
     hideDiv(div) {
         div.classList.add("hidden");
         div.classList.remove("unhidden");
     }
+
     showDiv(div) {
         div.classList.remove("hidden");
         div.classList.add("unhidden");
     }
+
     hideSettings() {
         DomHelper.removeClass("selected", this.getSettingsButton());
         this.settingsShown = false;
         this.hideDiv(this.getSettingsDiv());
     }
+
     showSettings() {
         this.hideAllDialogs();
         DomHelper.addClassToElement("selected", this.getSettingsButton());
@@ -238,9 +249,11 @@ export class UI {
         }
         return this.settingsDiv;
     }
+
     getSettingsContent() {
         return getSettingsDiv();
     }
+
     getFullscreenButton() {
         if (!this.fullscreenButton) {
             this.fullscreen = false;
@@ -481,6 +494,7 @@ export class UI {
         }
         return this.channelMenuDiv;
     }
+
     showChannels(channelMenuDiv) {
         if (this.tracksShown) {
             this.hideTracks();
@@ -495,13 +509,12 @@ export class UI {
         this.channelsShown = false;
         channelMenuDiv.style.display = "none";
     }
+
     hideAllDialogs() {
-        // this.hideChannels()
         this.hideMidiSetupDialog();
         this.hideSettings();
         this.hideLoadedSongsDiv();
         this.hideTracks();
-        this.hideLoadedSongsDiv();
     }
 
     getMainVolumeSlider() {
