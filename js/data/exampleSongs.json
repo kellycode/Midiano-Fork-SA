@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Liszt - La Campanella",
+        "fileName": "liz_et3.mid",
+        "url": "./midi/liz_et3.mid?raw=true"
+    },
+    {
+        "name": "Bach - Prelude and Fugue BWV 846",
+        "fileName": "bach_846.mid",
+        "url": "./midi/bach_846.mid?raw=true"
+    },
+    {
+        "name": "Christmas Time Is Here",
+        "fileName": "xmastime.mid",
+        "url": "./midi/xmastime.mid?raw=true"
+    },
+    {
+        "name": "Linus and Lucy",
+        "fileName": "Linus and Lucy.mid",
+        "url": "./midi/Linus and Lucy.mid?raw=true"
+    },
+    {
+        "name": "Mac's Boogie",
+        "fileName": "Mac's Boogie.mid",
+        "url": "./midi/Mac's Boogie.mid?raw=true"
+    }
+]
