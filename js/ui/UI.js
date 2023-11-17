@@ -16,6 +16,11 @@ export class UI {
         this.songUI = new SongUI();
         this.loadedSongsShown = false;
 
+        this.speedButtonGroup;
+        this.speedUpButton;
+        this.speedDisplayInput;
+        this.speedDownButton;
+
         //add callbacks to the player
         getPlayer().newSongCallbacks.push(this.newSongCallback.bind(this));
 
@@ -51,27 +56,26 @@ export class UI {
         //let topGroupsContainer = DomHelper.createDivWithClass("container");
         let topGroupsContainer = document.getElementById("MainNavBar").getElementsByClassName("container")[0];
 
-        let settingsGrpRight = this.getSettingsButtonGroup();
-
         let leftTop = document.getElementById("leftTopContainer");
         let middleTop = document.getElementById("middleTopContainer");
         let rightTop = document.getElementById("rightTopContainer");
 
-        let songSpeedGrp = this.getSpeedButtonGroup();
-
-        let songControlGroup = this.getSongControlButtonGroup();
+        this.speedButtonGroup = this.getSpeedButtonGroup();
 
         let volumeGrp = this.getVolumneButtonGroup();
+        let settingsGrpRight = this.getSettingsButtonGroup();
+
+        let songControlGroup = this.getSongControlButtonGroup();
 
         let fileGrp = this.getFileButtonGroup();
         let trackGrp = this.getTracksButtonGroup();
 
-        DomHelper.addClassToElements("align-middle", [songSpeedGrp, volumeGrp]);
+        DomHelper.addClassToElements("align-middle", [volumeGrp]);
 
         // zoom buttons added to the middleTopContainer
         let zoomGroup = new ZoomUI().getContentDiv(this.render);
 
-        DomHelper.appendChildren(rightTop, [songSpeedGrp, volumeGrp, settingsGrpRight]);
+        DomHelper.appendChildren(rightTop, [volumeGrp, settingsGrpRight]);
 
         DomHelper.appendChildren(topGroupsContainer, [rightTop]);
 
@@ -266,65 +270,35 @@ export class UI {
         return volumeGrp;
     }
 
+    updateSpeedDisplayValue() {
+        let speed = getPlayer().playbackSpeed;
+        this.speedDisplayInput.value = Math.floor(speed * 100) + "%";
+    }
+
     getSpeedButtonGroup() {
-        let speedButtonGroup = DomHelper.createElement("div", { justifyContent: "space-around" }, { id: "speedButtonGroup", className: "btn-group btn-group-vertical", role: "group" });
-        DomHelper.appendChildren(speedButtonGroup, [this.getSpeedUpButton(), this.getSpeedDisplayField(), this.getSpeedDownButton()]);
+        this.speedButtonGroup = document.getElementById("speedButtonGroup");
+
+        this.speedUpButton = document.getElementById("speedUpButton");
+        this.speedUpButton.onclick = function () {
+            getPlayer().increaseSpeed(0.05);
+            this.updateSpeedDisplayValue();
+        }.bind(this);
+
+        this.speedDisplayInput = document.getElementById("speedDisplayInput");
+        this.speedDisplayInput.value = Math.floor(getPlayer().playbackSpeed * 100) + "%";
+
+        this.speedDownButton = document.getElementById("speedDownButton");
+        this.speedDownButton.onclick = function () {
+            getPlayer().increaseSpeed(-0.05);
+            this.updateSpeedDisplayValue();
+        }.bind(this);
+
         return speedButtonGroup;
     }
 
-    getSpeedUpButton() {
-        if (!this.speedUpButton) {
-            // onclick
-            this.speedUpButton = DomHelper.createGlyphiconButton("speedUpButton", "triangle-top", (ev) => {
-                getPlayer().increaseSpeed(0.05);
-                this.updateSpeed();
-            });
-            this.speedUpButton.className += " btn-xs forcedThinButton";
-            this.speedUpButton.title = "Increase Speed";
-        }
-        return this.speedUpButton;
-    }
-
     updateSpeed() {
+        console.log("updateSpeed");
         this.getSpeedDisplayField().value = Math.round(getPlayer().playbackSpeed * 100) + "%";
-    }
-
-    getSpeedDisplayField() {
-        if (!this.speedDisplay) {
-            this.speedDisplay = DomHelper.createTextInput(
-                // onchange
-                (ev) => {
-                    let newVal = Math.max(1, Math.min(1000, parseInt(ev.target.value)));
-                    if (!isNaN(newVal)) {
-                        ev.target.value = newVal + "%";
-                        getPlayer().playbackSpeed = newVal / 100;
-                    }
-                },
-                {
-                    float: "none",
-                    textAlign: "center",
-                },
-                {
-                    id: "speedDisplayInput",
-                    value: Math.floor(getPlayer().playbackSpeed * 100) + "%",
-                    className: "forcedThinButton",
-                    type: "text",
-                }
-            );
-        }
-        return this.speedDisplay;
-    }
-
-    getSpeedDownButton() {
-        if (!this.speedDownButton) {
-            // onclick
-            this.speedDownButton = DomHelper.createGlyphiconButton("speedDownButton", "triangle-bottom", (ev) => {
-                getPlayer().increaseSpeed(-0.05);
-                this.updateSpeed();
-            });
-            this.speedDownButton.className += " btn-xs forcedThinButton";
-        }
-        return this.speedDownButton;
     }
 
     getNavBar() {
