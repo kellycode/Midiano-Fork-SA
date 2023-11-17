@@ -68,11 +68,11 @@ export class UI {
         let fileGrp = this.getFileButtonGroup();
         let trackGrp = this.getTracksButtonGroup();
 
-        DomHelper.addClassToElements("align-middle", [songSpeedGrp, songControlGroup, volumeGrp]);
+        DomHelper.addClassToElements("align-middle", [songSpeedGrp, volumeGrp]);
 
         // zoom buttons added to the middleTopContainer
         let zoomGroup = new ZoomUI().getContentDiv(this.render);
-        DomHelper.appendChildren(middleTop, [songControlGroup, zoomGroup]);
+        DomHelper.appendChildren(middleTop, [zoomGroup]);
         DomHelper.addClassToElement("zoomAdded", middleTop);
 
         DomHelper.appendChildren(rightTop, [songSpeedGrp, volumeGrp, settingsGrpRight]);
@@ -197,56 +197,38 @@ export class UI {
     }
 
     getSongControlButtonGroup() {
-        let songControlGroup = DomHelper.createElement("div", { justifyContent: "space-around" }, { id: "songControlGroup", className: "btn-group", role: "group" });
+        let songControlGroup = document.getElementById("songControlGroup");
 
-        DomHelper.appendChildren(songControlGroup, [this.getPlayButton(), this.getPauseButton(), this.getStopButton()]);
+        this.playButton = document.getElementById("songControlGroupPlay");
+        this.playButton.onclick = this.clickPlay.bind(this);
+
+        this.pauseButton = document.getElementById("songControlGroupPause");
+        this.pauseButton.onclick = this.clickPause.bind(this);
+
+        this.stopButton = document.getElementById("songControlGroupStop");
+        this.stopButton.onclick = this.clickStop.bind(this);
+
         return songControlGroup;
-    }
-
-    getPlayButton() {
-        if (!this.playButton) {
-            this.playButton = DomHelper.createGlyphiconButton("songControlGroupPlay", "play", this.clickPlay.bind(this));
-            DomHelper.addClassToElement("btn-lg", this.playButton);
-        }
-        return this.playButton;
     }
 
     clickPlay(ev) {
         if (getPlayer().song) {
-            DomHelper.removeClass("selected", this.getPauseButton());
+            this.pauseButton.classList.remove("selected");
             getPlayer().startPlay();
-            DomHelper.addClassToElement("selected", this.playButton);
+            this.playButton.classList.add("selected");
         }
-    }
-
-    getPauseButton() {
-        if (!this.pauseButton) {
-            this.pauseButton = DomHelper.createGlyphiconButton("songControlGroupPause", "pause", this.clickPause.bind(this));
-            DomHelper.addClassToElement("btn-lg", this.pauseButton);
-        }
-        return this.pauseButton;
     }
 
     clickPause(ev) {
         getPlayer().pause();
-        DomHelper.removeClass("selected", this.getPlayButton());
-
-        DomHelper.addClassToElement("selected", this.pauseButton);
-    }
-
-    getStopButton() {
-        if (!this.stopButton) {
-            this.stopButton = DomHelper.createGlyphiconButton("songControlGroupStop", "stop", this.clickStop.bind(this));
-
-            DomHelper.addClassToElement("btn-lg", this.stopButton);
-        }
-        return this.stopButton;
+        this.playButton.classList.remove("selected");
+        this.pauseButton.classList.add("selected");
     }
 
     clickStop(ev) {
         getPlayer().stop();
-        DomHelper.removeClass("selected", this.getPlayButton());
-        DomHelper.removeClass("selected", this.getPauseButton());
+        this.playButton.classList.remove("selected");
+        this.pauseButton.classList.remove("selected");
     }
 
     getMinimizeButton() {
