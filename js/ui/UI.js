@@ -274,7 +274,8 @@ export class UI {
 
     getSpeedUpButton() {
         if (!this.speedUpButton) {
-            this.speedUpButton = DomHelper.createGlyphiconButton("speedUp", "triangle-top", (ev) => {
+            // onclick
+            this.speedUpButton = DomHelper.createGlyphiconButton("speedUpButton", "triangle-top", (ev) => {
                 getPlayer().increaseSpeed(0.05);
                 this.updateSpeed();
             });
@@ -291,6 +292,7 @@ export class UI {
     getSpeedDisplayField() {
         if (!this.speedDisplay) {
             this.speedDisplay = DomHelper.createTextInput(
+                // onchange
                 (ev) => {
                     let newVal = Math.max(1, Math.min(1000, parseInt(ev.target.value)));
                     if (!isNaN(newVal)) {
@@ -303,6 +305,7 @@ export class UI {
                     textAlign: "center",
                 },
                 {
+                    id: "speedDisplayInput",
                     value: Math.floor(getPlayer().playbackSpeed * 100) + "%",
                     className: "forcedThinButton",
                     type: "text",
@@ -314,7 +317,8 @@ export class UI {
 
     getSpeedDownButton() {
         if (!this.speedDownButton) {
-            this.speedDownButton = DomHelper.createGlyphiconButton("speedUp", "triangle-bottom", (ev) => {
+            // onclick
+            this.speedDownButton = DomHelper.createGlyphiconButton("speedDownButton", "triangle-bottom", (ev) => {
                 getPlayer().increaseSpeed(-0.05);
                 this.updateSpeed();
             });
