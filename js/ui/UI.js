@@ -129,13 +129,6 @@ export class UI {
         this.onMenuHeightChange = func;
     }
 
-    getTracksButtonGroup() {
-        let trackGrp = DomHelper.createButtonGroup(true);
-        //let trackGrp = DomHelper.createElement("div", { justifyContent: "space-around" }, { className: "btn-group btn-group-vertical", role: "group" })
-        DomHelper.appendChildren(trackGrp, [this.getTracksButton(), this.getMidiSetupButton()]);
-        return trackGrp;
-    }
-
     getVolumneButtonGroup() {
         let volumeGrp = DomHelper.createButtonGroup(true);
         DomHelper.appendChildren(volumeGrp, [this.getMainVolumeSlider().container, this.getMuteButton()]);
@@ -202,6 +195,69 @@ export class UI {
         reader.readAsDataURL(file);
     }
 
+    getTracksButtonGroup() {
+        let trackGrp = DomHelper.createElement("div", { justifyContent: "space-around" }, { id: "tracksButtonGroup", className: "btn-group btn-group-vertical", role: "group" });
+
+        DomHelper.appendChildren(trackGrp, [this.getTracksButton(), this.getMidiSetupButton()]);
+        return trackGrp;
+    }
+
+    getTracksButton() {
+        if (!this.tracksButton) {
+            this.tracksButton = DomHelper.createGlyphiconTextButton("tracksButton", "align-justify", "Tracks", (ev) => {
+                if (this.tracksShown) {
+                    this.hideTracks();
+                } else {
+                    this.showTracks();
+                }
+            });
+            DomHelper.addClassToElement("floatSpanLeft", this.tracksButton);
+        }
+        return this.tracksButton;
+    }
+
+    hideTracks() {
+        DomHelper.removeClass("selected", this.tracksButton);
+        this.tracksShown = false;
+        this.hideDiv(this.getTrackMenuDiv());
+    }
+
+    showTracks() {
+        this.hideAllDialogs();
+        DomHelper.addClassToElement("selected", this.tracksButton);
+        this.tracksShown = true;
+        //instrument of a track could theoretically change during the song.
+        document.querySelectorAll(".instrumentName").forEach((el) => (el.innerHTML = getPlayer().getCurrentTrackInstrument(el.id.split("instrumentName")[1])));
+        this.showDiv(this.getTrackMenuDiv());
+    }
+
+    getMidiSetupButton() {
+        if (!this.midiSetupButton) {
+            this.midiSetupButton = DomHelper.createGlyphiconTextButton("midiSetup", "tower", "Midi-Setup", (ev) => {
+                if (this.midiSetupDialogShown) {
+                    this.hideMidiSetupDialog();
+                } else {
+                    this.showMidiSetupDialog();
+                }
+            });
+            DomHelper.addClassToElement("floatSpanLeft", this.midiSetupButton);
+        }
+        return this.midiSetupButton;
+    }
+
+    hideMidiSetupDialog() {
+        DomHelper.removeClass("selected", this.midiSetupButton);
+        this.midiSetupDialogShown = false;
+        this.hideDiv(this.getMidiSetupDialog());
+    }
+
+    showMidiSetupDialog() {
+        this.hideAllDialogs();
+        DomHelper.addClassToElement("selected", this.midiSetupButton);
+        this.midiSetupDialogShown = true;
+        this.showDiv(this.getMidiSetupDialog());
+    }
+
     getNavBar() {
         return document.getElementById("MainNavBar");
     }
@@ -241,6 +297,7 @@ export class UI {
         this.settingsShown = true;
         this.showDiv(this.getSettingsDiv());
     }
+
     getSettingsDiv() {
         if (!this.settingsDiv) {
             this.settingsDiv = DomHelper.createDivWithIdAndClass("settingsDiv", "innerMenuDiv");
@@ -337,9 +394,11 @@ export class UI {
         };
         document.body.appendChild(dragArea);
     }
+
     handleDragOverFile(ev) {
         this.createFileDragArea().style;
     }
+
     handleDragDropFileSelect(ev) {
         if (ev.dataTransfer.items) {
             // Use DataTransferItemList interface to access the file(s)
@@ -367,6 +426,7 @@ export class UI {
         }
         return this.speedDiv;
     }
+
     getSpeedUpButton() {
         if (!this.speedUpButton) {
             this.speedUpButton = DomHelper.createGlyphiconButton("speedUp", "triangle-top", (ev) => {
@@ -378,9 +438,11 @@ export class UI {
         }
         return this.speedUpButton;
     }
+
     updateSpeed() {
         this.getSpeedDisplayField().value = Math.round(getPlayer().playbackSpeed * 100) + "%";
     }
+
     getSpeedDisplayField() {
         if (!this.speedDisplay) {
             this.speedDisplay = DomHelper.createTextInput(
@@ -404,6 +466,7 @@ export class UI {
         }
         return this.speedDisplay;
     }
+
     getSpeedDownButton() {
         if (!this.speedDownButton) {
             this.speedDownButton = DomHelper.createGlyphiconButton("speedUp", "triangle-bottom", (ev) => {
@@ -414,60 +477,7 @@ export class UI {
         }
         return this.speedDownButton;
     }
-    getTracksButton() {
-        if (!this.tracksButton) {
-            this.tracksButton = DomHelper.createGlyphiconTextButton("tracks", "align-justify", "Tracks", (ev) => {
-                if (this.tracksShown) {
-                    this.hideTracks();
-                } else {
-                    this.showTracks();
-                }
-            });
-            DomHelper.addClassToElement("floatSpanLeft", this.tracksButton);
-        }
-        return this.tracksButton;
-    }
-    hideTracks() {
-        DomHelper.removeClass("selected", this.tracksButton);
-        this.tracksShown = false;
-        this.hideDiv(this.getTrackMenuDiv());
-    }
 
-    showTracks() {
-        this.hideAllDialogs();
-        DomHelper.addClassToElement("selected", this.tracksButton);
-        this.tracksShown = true;
-        //instrument of a track could theoretically change during the song.
-        document.querySelectorAll(".instrumentName").forEach((el) => (el.innerHTML = getPlayer().getCurrentTrackInstrument(el.id.split("instrumentName")[1])));
-        this.showDiv(this.getTrackMenuDiv());
-    }
-
-    getMidiSetupButton() {
-        if (!this.midiSetupButton) {
-            this.midiSetupButton = DomHelper.createGlyphiconTextButton("midiSetup", "tower", "Midi-Setup", (ev) => {
-                if (this.midiSetupDialogShown) {
-                    this.hideMidiSetupDialog();
-                } else {
-                    this.showMidiSetupDialog();
-                }
-            });
-            DomHelper.addClassToElement("floatSpanLeft", this.midiSetupButton);
-        }
-        return this.midiSetupButton;
-    }
-    hideMidiSetupDialog() {
-        DomHelper.removeClass("selected", this.midiSetupButton);
-        this.midiSetupDialogShown = false;
-        this.hideDiv(this.getMidiSetupDialog());
-    }
-
-    showMidiSetupDialog() {
-        this.hideAllDialogs();
-        DomHelper.addClassToElement("selected", this.midiSetupButton);
-        this.midiSetupDialogShown = true;
-
-        this.showDiv(this.getMidiSetupDialog());
-    }
     getChannelsButton() {
         if (!this.channelsButton) {
             let channelMenuDiv = this.getChannelMenuDiv();
@@ -485,6 +495,7 @@ export class UI {
         }
         return this.channelsButton;
     }
+
     getChannelMenuDiv() {
         if (!this.channelMenuDiv) {
             this.channelMenuDiv = DomHelper.createDivWithId("trackContainerDiv");
