@@ -26,8 +26,6 @@ export class UI {
         this.menuHeight = 200;
 
         document.querySelectorAll(".innerMenuDiv").forEach((el) => (el.style.height = "calc(100% - " + (this.getNavBar().clientHeight + 24) + "px)"));
-
-        document.body.appendChild(new ZoomUI().getContentDiv(render));
     }
 
     setExampleSongs(exampleSongsJson) {
@@ -72,18 +70,13 @@ export class UI {
 
         // zoom buttons added to the middleTopContainer
         let zoomGroup = new ZoomUI().getContentDiv(this.render);
-        DomHelper.appendChildren(middleTop, [zoomGroup]);
-        DomHelper.addClassToElement("zoomAdded", middleTop);
 
         DomHelper.appendChildren(rightTop, [songSpeedGrp, volumeGrp, settingsGrpRight]);
 
-        DomHelper.appendChildren(topGroupsContainer, [leftTop, middleTop, rightTop]);
-        this.getNavBar().appendChild(topGroupsContainer);
+        DomHelper.appendChildren(topGroupsContainer, [rightTop]);
 
         let minimizeButton = this.getMinimizeButton();
         document.body.appendChild(minimizeButton);
-
-        document.body.appendChild(this.getNavBar());
 
         let innerMenuDivsContainer = DomHelper.createElementWithClass("innerMenuDivsContainer");
         DomHelper.appendChildren(innerMenuDivsContainer, [this.getTrackMenuDiv(), this.getLoadedSongsDiv(), this.getSettingsDiv()]);
@@ -274,9 +267,60 @@ export class UI {
     }
 
     getSpeedButtonGroup() {
-        let songSpeedGrp = DomHelper.createButtonGroup(true);
-        DomHelper.appendChildren(songSpeedGrp, [this.getSpeedDiv()]);
-        return songSpeedGrp;
+        let speedButtonGroup = DomHelper.createElement("div", { justifyContent: "space-around" }, { id: "speedButtonGroup", className: "btn-group btn-group-vertical", role: "group" });
+        DomHelper.appendChildren(speedButtonGroup, [this.getSpeedUpButton(), this.getSpeedDisplayField(), this.getSpeedDownButton()]);
+        return speedButtonGroup;
+    }
+
+    getSpeedUpButton() {
+        if (!this.speedUpButton) {
+            this.speedUpButton = DomHelper.createGlyphiconButton("speedUp", "triangle-top", (ev) => {
+                getPlayer().increaseSpeed(0.05);
+                this.updateSpeed();
+            });
+            this.speedUpButton.className += " btn-xs forcedThinButton";
+            this.speedUpButton.title = "Increase Speed";
+        }
+        return this.speedUpButton;
+    }
+
+    updateSpeed() {
+        this.getSpeedDisplayField().value = Math.round(getPlayer().playbackSpeed * 100) + "%";
+    }
+
+    getSpeedDisplayField() {
+        if (!this.speedDisplay) {
+            this.speedDisplay = DomHelper.createTextInput(
+                (ev) => {
+                    let newVal = Math.max(1, Math.min(1000, parseInt(ev.target.value)));
+                    if (!isNaN(newVal)) {
+                        ev.target.value = newVal + "%";
+                        getPlayer().playbackSpeed = newVal / 100;
+                    }
+                },
+                {
+                    float: "none",
+                    textAlign: "center",
+                },
+                {
+                    value: Math.floor(getPlayer().playbackSpeed * 100) + "%",
+                    className: "forcedThinButton",
+                    type: "text",
+                }
+            );
+        }
+        return this.speedDisplay;
+    }
+
+    getSpeedDownButton() {
+        if (!this.speedDownButton) {
+            this.speedDownButton = DomHelper.createGlyphiconButton("speedUp", "triangle-bottom", (ev) => {
+                getPlayer().increaseSpeed(-0.05);
+                this.updateSpeed();
+            });
+            this.speedDownButton.className += " btn-xs forcedThinButton";
+        }
+        return this.speedDownButton;
     }
 
     getNavBar() {
@@ -436,67 +480,6 @@ export class UI {
                 this.readFile(file);
             }
         }
-    }
-
-    getSpeedDiv() {
-        if (!this.speedDiv) {
-            this.speedDiv = DomHelper.createDivWithClass("btn-group btn-group-vertical");
-            this.speedDiv.appendChild(this.getSpeedUpButton());
-            this.speedDiv.appendChild(this.getSpeedDisplayField());
-            this.speedDiv.appendChild(this.getSpeedDownButton());
-        }
-        return this.speedDiv;
-    }
-
-    getSpeedUpButton() {
-        if (!this.speedUpButton) {
-            this.speedUpButton = DomHelper.createGlyphiconButton("speedUp", "triangle-top", (ev) => {
-                getPlayer().increaseSpeed(0.05);
-                this.updateSpeed();
-            });
-            this.speedUpButton.className += " btn-xs forcedThinButton";
-            this.speedUpButton.title = "Stack Overflow";
-        }
-        return this.speedUpButton;
-    }
-
-    updateSpeed() {
-        this.getSpeedDisplayField().value = Math.round(getPlayer().playbackSpeed * 100) + "%";
-    }
-
-    getSpeedDisplayField() {
-        if (!this.speedDisplay) {
-            this.speedDisplay = DomHelper.createTextInput(
-                (ev) => {
-                    let newVal = Math.max(1, Math.min(1000, parseInt(ev.target.value)));
-                    if (!isNaN(newVal)) {
-                        ev.target.value = newVal + "%";
-                        getPlayer().playbackSpeed = newVal / 100;
-                    }
-                },
-                {
-                    float: "none",
-                    textAlign: "center",
-                },
-                {
-                    value: Math.floor(getPlayer().playbackSpeed * 100) + "%",
-                    className: "forcedThinButton",
-                    type: "text",
-                }
-            );
-        }
-        return this.speedDisplay;
-    }
-
-    getSpeedDownButton() {
-        if (!this.speedDownButton) {
-            this.speedDownButton = DomHelper.createGlyphiconButton("speedUp", "triangle-bottom", (ev) => {
-                getPlayer().increaseSpeed(-0.05);
-                this.updateSpeed();
-            });
-            this.speedDownButton.className += " btn-xs forcedThinButton";
-        }
-        return this.speedDownButton;
     }
 
     getChannelsButton() {

@@ -1,50 +1,30 @@
-import { getPlayer } from "../player/Player.js"
-import { DomHelper } from "./DomHelper.js"
+import { getPlayer } from "../player/Player.js";
+import { DomHelper } from "./DomHelper.js";
 
 export class ZoomUI {
-	constructor() {}
-	getContentDiv(render) {
-		let cont = DomHelper.createDivWithClass("zoomGroup btn-group")
-		//zoomIn
-		cont.appendChild(
-			DomHelper.createGlyphiconButton("zoomInButton", "zoom-in", () =>
-				render.renderDimensions.zoomIn()
-			)
-		)
+    constructor() {}
 
-		//zoomOut
-		cont.appendChild(
-			DomHelper.createGlyphiconButton("zoomOutButton", "zoom-out", () =>
-				render.renderDimensions.zoomOut()
-			)
-		)
-		//moveLeft
-		cont.appendChild(
-			DomHelper.createGlyphiconButton("moveViewLeftButton", "arrow-left", () =>
-				render.renderDimensions.moveViewLeft()
-			)
-		)
+    getContentDiv(render) {
+        let cont = document.getElementById("zoomButtonGroup");
 
-		//moveRight
-		cont.appendChild(
-			DomHelper.createGlyphiconButton("moveViewLeftButton", "arrow-right", () =>
-				render.renderDimensions.moveViewRight()
-			)
-		)
-		const fitSongButton = DomHelper.createTextButton(
-			"fitSongButton",
-			"Fit Song",
-			() => render.renderDimensions.fitSong(getPlayer().song.getNoteRange())
-		)
-		fitSongButton.style.float = "none"
-		//FitSong
-		cont.appendChild(fitSongButton)
-		//ShowAll
-		cont.appendChild(
-			DomHelper.createTextButton("showAllButton", "Show All", () =>
-				render.renderDimensions.showAll()
-			)
-		)
-		return cont
-	}
+        let zoomInButton = document.getElementById("zoomInButton");
+        zoomInButton.onclick = () => render.renderDimensions.zoomIn();
+
+        let zoomOutButton = document.getElementById("zoomOutButton");
+        zoomOutButton.onclick = () => render.renderDimensions.zoomOut();
+
+        let moveViewLeftButton = document.getElementById("moveViewLeftButton");
+        moveViewLeftButton.onclick = () => render.renderDimensions.moveViewLeft();
+
+        let moveViewRightButton = document.getElementById("moveViewRightButton");
+        moveViewRightButton.onclick = () => render.renderDimensions.moveViewRight();
+
+        let fitSongButton = document.getElementById("fitSongButton");
+        fitSongButton.onclick = () => render.renderDimensions.fitSong(getPlayer().song.getNoteRange());
+
+        let showAllButton = document.getElementById("showAllButton");
+        showAllButton.onclick = () => render.renderDimensions.showAll();
+
+        return cont;
+    }
 }

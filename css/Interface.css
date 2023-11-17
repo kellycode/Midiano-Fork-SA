@@ -334,12 +334,12 @@ canvas {
     align-items: center;
 }
 
-.topContainer.zoomAdded {
+.topContainer.zoomAddAdjustment {
     flex-direction: column;
     justify-content: space-around;
 }
 
-.topContainer.zoomAdded div {
+.topContainer.zoomAddAdjustment div {
     margin: 4px;
 }
 
