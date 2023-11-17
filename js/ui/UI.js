@@ -61,19 +61,18 @@ export class UI {
 
         let songSpeedGrp = this.getSpeedButtonGroup();
 
-        let songControlGrp = this.getSongControlButtonGroup();
+        let songControlGroup = this.getSongControlButtonGroup();
 
         let volumeGrp = this.getVolumneButtonGroup();
 
-        let fileGrp = this.getFileButtonGroupNew();
+        let fileGrp = this.getFileButtonGroup();
         let trackGrp = this.getTracksButtonGroup();
 
-        DomHelper.addClassToElements("align-middle", [songSpeedGrp, songControlGrp, volumeGrp, trackGrp]);
-        DomHelper.appendChildren(leftTop, [trackGrp]);
+        DomHelper.addClassToElements("align-middle", [songSpeedGrp, songControlGroup, volumeGrp]);
 
         // zoom buttons added to the middleTopContainer
         let zoomGroup = new ZoomUI().getContentDiv(this.render);
-        DomHelper.appendChildren(middleTop, [songControlGrp, zoomGroup]);
+        DomHelper.appendChildren(middleTop, [songControlGroup, zoomGroup]);
         DomHelper.addClassToElement("zoomAdded", middleTop);
 
         DomHelper.appendChildren(rightTop, [songSpeedGrp, volumeGrp, settingsGrpRight]);
@@ -93,61 +92,7 @@ export class UI {
         this.createFileDragArea();
     }
 
-    getMinimizeButton() {
-        if (!this.minimizeButton) {
-            this.minimizeButton = DomHelper.createGlyphiconButton("minimizeMenu", "chevron-up", () => {
-                if (!this.navMinimized) {
-                    this.getNavBar().style.marginTop = "-" + this.getNavBar().clientHeight + "px";
-                    this.navMinimized = true;
-                    this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-up");
-                    this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-down");
-                    this.onMenuHeightChange(0);
-                } else {
-                    this.getNavBar().style.marginTop = "0px";
-                    this.navMinimized = false;
-
-                    this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-up");
-                    this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-down");
-                    this.onMenuHeightChange(this.getNavBar().clientHeight);
-                }
-            });
-            this.minimizeButton.style.padding = "0px";
-            this.minimizeButton.style.fontSize = "0.5em";
-        }
-        let navbarHeight = this.navMinimized ? 0 : this.getNavBar().clientHeight;
-        this.minimizeButton.style.top = navbarHeight + 23 + "px";
-        return this.minimizeButton;
-    }
-
-    getSettingsButtonGroup() {
-        let settingsGrpRight = DomHelper.createButtonGroup(true);
-        DomHelper.appendChildren(settingsGrpRight, [this.getFullscreenButton(), this.getSettingsButton()]);
-        return settingsGrpRight;
-    }
-
-    setOnMenuHeightChange(func) {
-        this.onMenuHeightChange = func;
-    }
-
-    getVolumneButtonGroup() {
-        let volumeGrp = DomHelper.createButtonGroup(true);
-        DomHelper.appendChildren(volumeGrp, [this.getMainVolumeSlider().container, this.getMuteButton()]);
-        return volumeGrp;
-    }
-
-    getSongControlButtonGroup() {
-        let songControlGrp = DomHelper.createButtonGroup(false);
-        DomHelper.appendChildren(songControlGrp, [this.getPlayButton(), this.getPauseButton(), this.getStopButton()]);
-        return songControlGrp;
-    }
-
-    getSpeedButtonGroup() {
-        let songSpeedGrp = DomHelper.createButtonGroup(true);
-        DomHelper.appendChildren(songSpeedGrp, [this.getSpeedDiv()]);
-        return songSpeedGrp;
-    }
-
-    getFileButtonGroupNew() {
+    getFileButtonGroup() {
         let fileGroup = document.getElementById("fileButtonGroup");
 
         let hiddenInput = document.getElementById("hiddenFileInput");
@@ -196,66 +141,160 @@ export class UI {
     }
 
     getTracksButtonGroup() {
-        let trackGrp = DomHelper.createElement("div", { justifyContent: "space-around" }, { id: "tracksButtonGroup", className: "btn-group btn-group-vertical", role: "group" });
+        let trackGrp = document.getElementById("tracksButtonGroup");
 
-        DomHelper.appendChildren(trackGrp, [this.getTracksButton(), this.getMidiSetupButton()]);
+        this.tracksButton = document.getElementById("tracksButton");
+        this.tracksButton.onclick = (ev) => {
+            if (this.tracksShown) {
+                this.hideTracks();
+            } else {
+                this.showTracks();
+            }
+        };
+
+        this.midiSetupButton = document.getElementById("midiSetupButton");
+        this.midiSetupButton.onclick = (ev) => {
+            if (this.midiSetupDialogShown) {
+                this.hideMidiSetupDialog();
+            } else {
+                this.showMidiSetupDialog();
+            }
+        };
+
         return trackGrp;
     }
 
-    getTracksButton() {
-        if (!this.tracksButton) {
-            this.tracksButton = DomHelper.createGlyphiconTextButton("tracksButton", "align-justify", "Tracks", (ev) => {
-                if (this.tracksShown) {
-                    this.hideTracks();
-                } else {
-                    this.showTracks();
-                }
-            });
-            DomHelper.addClassToElement("floatSpanLeft", this.tracksButton);
-        }
-        return this.tracksButton;
-    }
-
     hideTracks() {
-        DomHelper.removeClass("selected", this.tracksButton);
+        //DomHelper.removeClass("selected", this.tracksButton);
+        this.tracksButton.classList.remove("selected");
         this.tracksShown = false;
         this.hideDiv(this.getTrackMenuDiv());
     }
 
     showTracks() {
         this.hideAllDialogs();
-        DomHelper.addClassToElement("selected", this.tracksButton);
+        //DomHelper.addClassToElement("selected", this.tracksButton);
+        this.tracksButton.classList.add("selected");
         this.tracksShown = true;
         //instrument of a track could theoretically change during the song.
         document.querySelectorAll(".instrumentName").forEach((el) => (el.innerHTML = getPlayer().getCurrentTrackInstrument(el.id.split("instrumentName")[1])));
         this.showDiv(this.getTrackMenuDiv());
     }
 
-    getMidiSetupButton() {
-        if (!this.midiSetupButton) {
-            this.midiSetupButton = DomHelper.createGlyphiconTextButton("midiSetup", "tower", "Midi-Setup", (ev) => {
-                if (this.midiSetupDialogShown) {
-                    this.hideMidiSetupDialog();
-                } else {
-                    this.showMidiSetupDialog();
-                }
-            });
-            DomHelper.addClassToElement("floatSpanLeft", this.midiSetupButton);
-        }
-        return this.midiSetupButton;
-    }
-
     hideMidiSetupDialog() {
-        DomHelper.removeClass("selected", this.midiSetupButton);
+        //DomHelper.removeClass("selected", this.midiSetupButton);
+        this.midiSetupButton.classList.remove("selected");
         this.midiSetupDialogShown = false;
         this.hideDiv(this.getMidiSetupDialog());
     }
 
     showMidiSetupDialog() {
         this.hideAllDialogs();
-        DomHelper.addClassToElement("selected", this.midiSetupButton);
+        this.midiSetupButton.classList.add("selected");
+        //DomHelper.addClassToElement("selected", this.midiSetupButton);
         this.midiSetupDialogShown = true;
         this.showDiv(this.getMidiSetupDialog());
+    }
+
+    getSongControlButtonGroup() {
+        let songControlGroup = DomHelper.createElement("div", { justifyContent: "space-around" }, { id: "songControlGroup", className: "btn-group", role: "group" });
+
+        DomHelper.appendChildren(songControlGroup, [this.getPlayButton(), this.getPauseButton(), this.getStopButton()]);
+        return songControlGroup;
+    }
+
+    getPlayButton() {
+        if (!this.playButton) {
+            this.playButton = DomHelper.createGlyphiconButton("songControlGroupPlay", "play", this.clickPlay.bind(this));
+            DomHelper.addClassToElement("btn-lg", this.playButton);
+        }
+        return this.playButton;
+    }
+
+    clickPlay(ev) {
+        if (getPlayer().song) {
+            DomHelper.removeClass("selected", this.getPauseButton());
+            getPlayer().startPlay();
+            DomHelper.addClassToElement("selected", this.playButton);
+        }
+    }
+
+    getPauseButton() {
+        if (!this.pauseButton) {
+            this.pauseButton = DomHelper.createGlyphiconButton("songControlGroupPause", "pause", this.clickPause.bind(this));
+            DomHelper.addClassToElement("btn-lg", this.pauseButton);
+        }
+        return this.pauseButton;
+    }
+
+    clickPause(ev) {
+        getPlayer().pause();
+        DomHelper.removeClass("selected", this.getPlayButton());
+
+        DomHelper.addClassToElement("selected", this.pauseButton);
+    }
+
+    getStopButton() {
+        if (!this.stopButton) {
+            this.stopButton = DomHelper.createGlyphiconButton("songControlGroupStop", "stop", this.clickStop.bind(this));
+
+            DomHelper.addClassToElement("btn-lg", this.stopButton);
+        }
+        return this.stopButton;
+    }
+
+    clickStop(ev) {
+        getPlayer().stop();
+        DomHelper.removeClass("selected", this.getPlayButton());
+        DomHelper.removeClass("selected", this.getPauseButton());
+    }
+
+    getMinimizeButton() {
+        if (!this.minimizeButton) {
+            this.minimizeButton = DomHelper.createGlyphiconButton("minimizeMenu", "chevron-up", () => {
+                if (!this.navMinimized) {
+                    this.getNavBar().style.marginTop = "-" + this.getNavBar().clientHeight + "px";
+                    this.navMinimized = true;
+                    this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-up");
+                    this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-down");
+                    this.onMenuHeightChange(0);
+                } else {
+                    this.getNavBar().style.marginTop = "0px";
+                    this.navMinimized = false;
+
+                    this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-up");
+                    this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-down");
+                    this.onMenuHeightChange(this.getNavBar().clientHeight);
+                }
+            });
+            this.minimizeButton.style.padding = "0px";
+            this.minimizeButton.style.fontSize = "0.5em";
+        }
+        let navbarHeight = this.navMinimized ? 0 : this.getNavBar().clientHeight;
+        this.minimizeButton.style.top = navbarHeight + 23 + "px";
+        return this.minimizeButton;
+    }
+
+    getSettingsButtonGroup() {
+        let settingsGrpRight = DomHelper.createButtonGroup(true);
+        DomHelper.appendChildren(settingsGrpRight, [this.getFullscreenButton(), this.getSettingsButton()]);
+        return settingsGrpRight;
+    }
+
+    setOnMenuHeightChange(func) {
+        this.onMenuHeightChange = func;
+    }
+
+    getVolumneButtonGroup() {
+        let volumeGrp = DomHelper.createButtonGroup(true);
+        DomHelper.appendChildren(volumeGrp, [this.getMainVolumeSlider().container, this.getMuteButton()]);
+        return volumeGrp;
+    }
+
+    getSpeedButtonGroup() {
+        let songSpeedGrp = DomHelper.createButtonGroup(true);
+        DomHelper.appendChildren(songSpeedGrp, [this.getSpeedDiv()]);
+        return songSpeedGrp;
     }
 
     getNavBar() {
@@ -569,47 +608,7 @@ export class UI {
         }
         return this.muteButton;
     }
-    getPlayButton() {
-        if (!this.playButton) {
-            this.playButton = DomHelper.createGlyphiconButton("play", "play", this.clickPlay.bind(this));
-            DomHelper.addClassToElement("btn-lg", this.playButton);
-        }
-        return this.playButton;
-    }
-    clickPlay(ev) {
-        if (getPlayer().song) {
-            DomHelper.removeClass("selected", this.getPauseButton());
-            getPlayer().startPlay();
-            DomHelper.addClassToElement("selected", this.playButton);
-        }
-    }
-    getPauseButton() {
-        if (!this.pauseButton) {
-            this.pauseButton = DomHelper.createGlyphiconButton("pause", "pause", this.clickPause.bind(this));
-            DomHelper.addClassToElement("btn-lg", this.pauseButton);
-        }
-        return this.pauseButton;
-    }
-    clickPause(ev) {
-        getPlayer().pause();
-        DomHelper.removeClass("selected", this.getPlayButton());
 
-        DomHelper.addClassToElement("selected", this.pauseButton);
-    }
-
-    getStopButton() {
-        if (!this.stopButton) {
-            this.stopButton = DomHelper.createGlyphiconButton("stop", "stop", this.clickStop.bind(this));
-
-            DomHelper.addClassToElement("btn-lg", this.stopButton);
-        }
-        return this.stopButton;
-    }
-    clickStop(ev) {
-        getPlayer().stop();
-        DomHelper.removeClass("selected", this.getPlayButton());
-        DomHelper.removeClass("selected", this.getPauseButton());
-    }
     resetTrackMenuDiv() {
         let menuDiv = this.getTrackMenuDiv();
         menuDiv.innerHTML = "";
