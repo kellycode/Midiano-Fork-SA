@@ -21,6 +21,12 @@ export class UI {
         this.speedDisplayInput;
         this.speedDownButton;
 
+        this.volumeGroup;
+        this.volumeSlider;
+        this.muteButton;
+
+        this.defaultPLayerVolume = 75;
+
         //add callbacks to the player
         getPlayer().newSongCallbacks.push(this.newSongCallback.bind(this));
 
@@ -62,7 +68,7 @@ export class UI {
 
         this.speedButtonGroup = this.getSpeedButtonGroup();
 
-        let volumeGrp = this.getVolumneButtonGroup();
+        this.volumeGroup = this.getVolumeButtonGroup();
         let settingsGrpRight = this.getSettingsButtonGroup();
 
         let songControlGroup = this.getSongControlButtonGroup();
@@ -70,14 +76,10 @@ export class UI {
         let fileGrp = this.getFileButtonGroup();
         let trackGrp = this.getTracksButtonGroup();
 
-        DomHelper.addClassToElements("align-middle", [volumeGrp]);
-
         // zoom buttons added to the middleTopContainer
         let zoomGroup = new ZoomUI().getContentDiv(this.render);
 
-        DomHelper.appendChildren(rightTop, [volumeGrp, settingsGrpRight]);
-
-        DomHelper.appendChildren(topGroupsContainer, [rightTop]);
+        DomHelper.appendChildren(rightTop, [settingsGrpRight]);
 
         let minimizeButton = this.getMinimizeButton();
         document.body.appendChild(minimizeButton);
@@ -228,6 +230,58 @@ export class UI {
         this.pauseButton.classList.remove("selected");
     }
 
+    getVolumeButtonGroup() {
+        this.volumeGroup = document.getElementById("volumeButtonGroup");
+
+        this.volumeSlider = document.getElementById("volumeSlider");
+
+        this.volumeSlider.value = this.defaultPLayerVolume;
+        getPlayer().volume = this.defaultPLayerVolume;
+
+        this.volumeSlider.onchange = (ev) => {
+            if (getPlayer().volume == 0 && parseInt(ev.target.value) != 0) {
+                console.log(ev.target.value);
+                DomHelper.replaceGlyph(this.getMuteButton(), "volume-off", "volume-up");
+            }
+            getPlayer().volume = parseInt(ev.target.value);
+            if (getPlayer().volume <= 0) {
+                DomHelper.replaceGlyph(this.getMuteButton(), "volume-up", "volume-off");
+            } else if (this.getMuteButton().innerHTML == "Unmute") {
+                DomHelper.replaceGlyph(this.getMuteButton(), "volume-off", "volume-up");
+            }
+        };
+
+        this.muteButton = document.getElementById("muteButton");
+        this.muteButton.onclick = (ev) => {
+            if (getPlayer().muted) {
+                getPlayer().muted = false;
+                if (!isNaN(getPlayer().mutedAtVolume)) {
+                    if (getPlayer().mutedAtVolume == 0) {
+                        getPlayer().mutedAtVolume = 100;
+                    }
+                    this.volumeSlider.value = getPlayer().mutedAtVolume;
+                    getPlayer().volume = getPlayer().mutedAtVolume;
+                }
+                DomHelper.replaceGlyph(this.muteButton, "volume-off", "volume-up");
+            } else {
+                getPlayer().mutedAtVolume = getPlayer().volume;
+                getPlayer().muted = true;
+                getPlayer().volume = 0;
+                this.volumeSlider.value = 0;
+                DomHelper.replaceGlyph(this.muteButton, "volume-up", "volume-off");
+            }
+        };
+
+        return this.volumeGroup;
+    }
+
+    getMuteButton() {
+        if (!this.muteButton) {
+            console.log("No Mute Button");
+        }
+        return this.muteButton;
+    }
+
     getMinimizeButton() {
         if (!this.minimizeButton) {
             this.minimizeButton = DomHelper.createGlyphiconButton("minimizeMenu", "chevron-up", () => {
@@ -264,12 +318,6 @@ export class UI {
         this.onMenuHeightChange = func;
     }
 
-    getVolumneButtonGroup() {
-        let volumeGrp = DomHelper.createButtonGroup(true);
-        DomHelper.appendChildren(volumeGrp, [this.getMainVolumeSlider().container, this.getMuteButton()]);
-        return volumeGrp;
-    }
-
     updateSpeedDisplayValue() {
         let speed = getPlayer().playbackSpeed;
         this.speedDisplayInput.value = Math.floor(speed * 100) + "%";
@@ -294,11 +342,6 @@ export class UI {
         }.bind(this);
 
         return speedButtonGroup;
-    }
-
-    updateSpeed() {
-        console.log("updateSpeed");
-        this.getSpeedDisplayField().value = Math.round(getPlayer().playbackSpeed * 100) + "%";
     }
 
     getNavBar() {
@@ -508,48 +551,6 @@ export class UI {
         this.hideSettings();
         this.hideLoadedSongsDiv();
         this.hideTracks();
-    }
-
-    getMainVolumeSlider() {
-        if (!this.mainVolumeSlider) {
-            this.mainVolumeSlider = DomHelper.createSliderWithLabel("volumeMain", "Master Volume", getPlayer().volume, 0, 100, 1, (ev) => {
-                if (getPlayer().volume == 0 && parseInt(ev.target.value) != 0) {
-                    DomHelper.replaceGlyph(this.getMuteButton(), "volume-off", "volume-up");
-                    //this.getMuteButton().firstChild.className = this.muteButton.firstChild.className.replace('volume-off', 'volume-up')
-                }
-                getPlayer().volume = parseInt(ev.target.value);
-                if (getPlayer().volume <= 0) {
-                    DomHelper.replaceGlyph(this.getMuteButton(), "volume-up", "volume-off");
-                } else if (this.getMuteButton().innerHTML == "Unmute") {
-                    DomHelper.replaceGlyph(this.getMuteButton(), "volume-off", "volume-up");
-                }
-            });
-        }
-        return this.mainVolumeSlider;
-    }
-    getMuteButton() {
-        if (!this.muteButton) {
-            this.muteButton = DomHelper.createGlyphiconButton("mute", "volume-up", (ev) => {
-                if (getPlayer().muted) {
-                    getPlayer().muted = false;
-                    if (!isNaN(getPlayer().mutedAtVolume)) {
-                        if (getPlayer().mutedAtVolume == 0) {
-                            getPlayer().mutedAtVolume = 100;
-                        }
-                        this.getMainVolumeSlider().slider.value = getPlayer().mutedAtVolume;
-                        getPlayer().volume = getPlayer().mutedAtVolume;
-                    }
-                    DomHelper.replaceGlyph(this.muteButton, "volume-off", "volume-up");
-                } else {
-                    getPlayer().mutedAtVolume = getPlayer().volume;
-                    getPlayer().muted = true;
-                    getPlayer().volume = 0;
-                    this.getMainVolumeSlider().slider.value = 0;
-                    DomHelper.replaceGlyph(this.muteButton, "volume-up", "volume-off");
-                }
-            });
-        }
-        return this.muteButton;
     }
 
     resetTrackMenuDiv() {

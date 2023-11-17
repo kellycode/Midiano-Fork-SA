@@ -39,7 +39,7 @@ export class DomHelper {
         });
     }
     static createSliderWithLabel(id, label, val, min, max, step, onChange) {
-        let cont = DomHelper.createElement("div", {}, { id: id + "container", className: "sliderContainer" });
+        let cont = DomHelper.createElement("div", {}, { id: id + "Container", className: "sliderContainer" });
         let labelDiv = DomHelper.createElement("label", {}, { id: id + "label", className: "sliderLabel", innerHTML: label });
         let slider = DomHelper.createSlider(id, val, min, max, step, onChange);
         cont.appendChild(labelDiv);
