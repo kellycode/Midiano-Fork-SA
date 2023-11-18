@@ -171,7 +171,8 @@ export class PianoRender {
         }
     }
     getDisplayKey(key) {
-        let blackToHash = replaceAllString(key, "b", "#");
+        // # was making incorrect black key name
+        let blackToHash = key; //replaceAllString(key, "b", "#");
         return blackToHash.replace(/[0-9]/g, "");
     }
     /**
