@@ -50,7 +50,7 @@ export class RenderDimensions {
             this.windowWidth / this.numberOfWhiteKeysShown;
         // )
 
-        this.whiteKeyHeight = WHITE_KEY_HEIGHT; //this.windowHeight * 0.2;
+        this.whiteKeyHeight = this.windowHeight * 0.2;
         this.blackKeyWidth = Math.floor(this.whiteKeyWidth * 0.5829787234);
         this.blackKeyHeight = Math.floor((this.whiteKeyHeight * 2) / 3) * (getSetting("blackKeyHeight") / 100);
 
