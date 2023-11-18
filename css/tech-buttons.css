@@ -1,0 +1,83 @@
+/* body {
+    background: rgba(0,0,0,0.9);
+    width: 100%;
+    font-family: "Roboto Condensed";
+    color: rgba(255,255,255,0.8);
+  }
+  
+  p {
+    width: 100%;
+    text-align: center;
+    font-size: 46px;
+    text-shadow: 0px 0px 5px rgba(0,0,0,1);
+  }
+  #container {
+    width: 750px;
+    margin: 0 auto;
+    padding: 20px;
+  } */
+
+.tech-btn {
+    background: rgba(50, 50, 50, 1);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 15px;
+    width: 100px;
+    text-align: center;
+    margin: 0px 10px;
+    border-radius: 2px;
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.8);
+    transition: 0.2s;
+    cursor: pointer;
+    float: left;
+}
+
+.tech-btn:hover {
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.9);
+    background: rgba(55, 55, 55, 1);
+}
+
+.tech-btn:before {
+    content: "";
+    display: block;
+    height: 5px;
+    width: 130px;
+    background: -webkit-linear-gradient(left, rgba(242, 133, 0, 0.5) 0%, rgba(2242, 133, 0, 1) 50%, rgba(242, 133, 0, 0.5) 100%);
+    position: relative;
+    left: -15px;
+    top: 30px;
+    box-shadow: 0px 0px 5px 1px rgba(240, 130, 10, 0.3);
+    transition: 0.1s;
+}
+
+.tech-btn:hover:before {
+    background: -webkit-linear-gradient(left, rgba(242, 133, 0, 1) 0%, rgba(255, 216, 171, 1) 50%, rgba(242, 133, 0, 1) 100%);
+    box-shadow: 0px 0px 7px 2px rgba(240, 130, 10, 0.4);
+}
+
+/* COLORS */
+
+.tech-btn.green:active:before {
+    background: -webkit-linear-gradient(left, rgba(145, 232, 66, 1) 0%, rgba(235, 255, 173, 1) 50%, rgba(145, 232, 66, 1) 100%);
+    box-shadow: 0px 0px 7px 2px rgba(145, 232, 66, 1);
+}
+
+.tech-btn.blue:active:before {
+    background: -webkit-linear-gradient(left, rgba(39, 90, 217, 1) 0%, rgba(179, 195, 230, 1) 50%, rgba(39, 90, 217, 1) 100%);
+    box-shadow: 0px 0px 7px 2px rgba(39, 90, 217, 1);
+}
+
+.tech-btn.red:active:before {
+    background: -webkit-linear-gradient(left, rgba(217, 39, 39, 1) 0%, rgba(255, 212, 212, 1) 50%, rgba(217, 39, 39, 1) 100%);
+    box-shadow: 0px 0px 7px 2px rgba(217, 39, 39, 1);
+}
+
+.tech-btn.purple:active:before {
+    background: -webkit-linear-gradient(left, rgba(217, 39, 205, 1) 0%, rgba(250, 187, 246, 1) 50%, rgba(217, 39, 205, 1) 100%);
+    box-shadow: 0px 0px 7px 2px rgba(217, 39, 205, 1);
+}
+
+.tech-btn.ice:active:before {
+    background: -webkit-linear-gradient(left, rgba(89, 230, 235, 1) 0%, rgba(207, 250, 252, 1) 50%, rgba(89, 230, 235, 1) 100%);
+    box-shadow: 0px 0px 7px 2px rgba(89, 230, 235, 1);
+}

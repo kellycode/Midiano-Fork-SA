@@ -22,7 +22,7 @@
     --fontWeakenedColor: #8a8a8a;
 
     --buttonFontColor: #bdbdbd;
-    --buttonBgColor: #494949;
+    --buttonBgColor: #111111;
     --buttonActiveBgColor: #757575;
     --buttonHoverBgColor: #494949;
     --buttonHoverFontColor: #dfdfdf;
@@ -84,6 +84,19 @@ canvas {
     float: left;
     cursor: pointer;
     z-index: 10;
+}
+
+#settingsButtonGroup,
+#volumeButtonGroup,
+#speedButtonGroup,
+#fileButtonGroup,
+#tracksButtonGroup,
+#middleTopContainer > div {
+    width: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .row {
@@ -267,6 +280,7 @@ canvas {
     display: flex;
     flex-direction: column;
 }
+
 .btn {
     position: relative;
     box-sizing: border-box;
@@ -276,7 +290,7 @@ canvas {
     padding: 0.5em;
 
     text-align: center;
-    font-size: 1em;
+    font-size: 0.8em;
     font-weight: normal !important;
 
     color: var(--buttonFontColor);
@@ -284,8 +298,8 @@ canvas {
 
     outline: none;
     border-radius: 3px;
+    border: 1px outset black;
     /* border: 1px solid rgba(0, 0, 0, 1); */
-    box-sizing: border-box;
 
     transition: all 0.15s ease-out;
 
@@ -321,6 +335,19 @@ canvas {
     font-size: 1.5em;
     margin-left: 0.2em;
     margin-right: 0.2em;
+}
+.no-wrap {
+    white-space: nowrap;
+}
+.btn-zoom-left {
+    width: 12.5%;
+}
+.btn-zoom-right {
+    width: 21%;
+    white-space: nowrap;
+}
+.btn-wide {
+    width: 100px;
 }
 .btn span {
     font-size: 1em;

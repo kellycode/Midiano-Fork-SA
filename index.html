@@ -30,7 +30,7 @@
 	<nav id="MainNavBar" class="navbar navbar-wrapper">
 		<div class="container">
 			<div id="leftTopContainer" class="topContainer">
-				<div id="fileButtonGroup" class="btn-group btn-group-vertical align-middle" role="group" style="justify-content: space-around;">
+				<div id="fileButtonGroup" class="btn-group btn-group-vertical align-middle" role="group">
 					<label id="uploadMidiButton" class="btn btn-default btn-file floatSpanLeft">
 						<span class="glyphicon glyphicon-folder-open"></span>
 						Upload Midi
@@ -42,7 +42,7 @@
 						Loaded Songs
 					</button>
 				</div>
-				<div id="tracksButtonGroup" class="btn-group btn-group-vertical align-middle" role="group" style="justify-content: space-around;">
+				<div id="tracksButtonGroup" class="btn-group btn-group-vertical align-middle" role="group">
 					<button id="tracksButton" type="button" class="btn btn-default floatSpanLeft">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-align-justify"></span>
@@ -56,49 +56,51 @@
 				</div>
 			</div>
 			<div id="middleTopContainer" class="topContainer zoomAddAdjustment">
-				<div id="songControlGroup" class="btn-group align-middle" role="group" style="justify-content: space-around;">
-					<button id="songControlGroupPlay" type="button" class="btn btn-default btn-lg">
+				<div style="width: auto; height: 100%;">
+				<div id="songControlGroup" class="btn-group align-middle" role="group">
+					<button id="songControlGroupPlay" type="button" class="btn btn-default btn-wide">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-play"></span>
 					</button>
-					<button id="songControlGroupPause" type="button" class="btn btn-default btn-lg">
+					<button id="songControlGroupPause" type="button" class="btn btn-default btn-wide">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-pause"></span>
 					</button>
-					<button id="songControlGroupStop" type="button" class="btn btn-default btn-lg">
+					<button id="songControlGroupStop" type="button" class="btn btn-default btn-wide">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-stop"></span>
 					</button>
 				</div>
 				<div id="zoomButtonGroup" class="zoomGroup btn-group">
-					<button id="zoomInButton" type="button" class="btn btn-default">
+					<button id="zoomInButton" type="button" class="btn btn-default btn-zoom-left">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-zoom-in"></span>
 					</button>
-					<button id="zoomOutButton" type="button" class="btn btn-default">
+					<button id="zoomOutButton" type="button" class="btn btn-default btn-zoom-left">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-zoom-out"></span>
 					</button>
-					<button id="moveViewLeftButton" type="button" class="btn btn-default">
+					<button id="moveViewLeftButton" type="button" class="btn btn-default btn-zoom-left">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-arrow-left"></span>
 					</button>
-					<button id="moveViewRightButton" type="button" class="btn btn-default">
+					<button id="moveViewRightButton" type="button" class="btn btn-default btn-zoom-left">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-arrow-right"></span>
 					</button>
-					<button id="fitSongButton" type="button" class="btn btn-default">
+					<button id="fitSongButton" type="button" class="btn btn-default btn-zoom-right">
 						Fit Song
 						<div class="btn-select-line"></div>
 					</button>
-					<button id="showAllButton" type="button" class="btn btn-default">
+					<button id="showAllButton" type="button" class="btn btn-default btn-zoom-right">
 						Show All
 						<div class="btn-select-line"></div>
 					</button>
 				</div>
 			</div>
+			</div>
 			<div id="rightTopContainer" class="topContainer">
-				<div id="speedButtonGroup" class="btn-group btn-group-vertical align-middle" role="group" style="justify-content: space-around;">
+				<div id="speedButtonGroup" class="btn-group btn-group-vertical align-middle" role="group">
 					<button id="speedUpButton" type="button" class="btn btn-default btn-xs forcedThinButton" title="Increase Speed">
 						<div class="btn-select-line"></div>
 						<span class="glyphicon glyphicon-triangle-top"></span>
@@ -109,7 +111,7 @@
 						<span class="glyphicon glyphicon-triangle-bottom"></span>
 					</button>
 				</div>
-				<div id="volumeButtonGroup" class="btn-group btn-group-vertical align-middle" role="group" style="justify-content: space-around;">
+				<div id="volumeButtonGroup" class="btn-group btn-group-vertical align-middle" role="group">
 					<div id="volumeSliderContainer" class="sliderContainer">
 						<label id="volumeSliderlabel" class="sliderLabel">
 							Master Volume
