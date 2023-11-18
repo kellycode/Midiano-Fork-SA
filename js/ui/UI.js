@@ -69,7 +69,7 @@ export class UI {
         this.speedButtonGroup = this.getSpeedButtonGroup();
 
         this.volumeGroup = this.getVolumeButtonGroup();
-        let settingsGrpRight = this.getSettingsButtonGroup();
+        let settingsButtonGroup = this.getSettingsButtonGroup();
 
         let songControlGroup = this.getSongControlButtonGroup();
 
@@ -79,7 +79,7 @@ export class UI {
         // zoom buttons added to the middleTopContainer
         let zoomGroup = new ZoomUI().getContentDiv(this.render);
 
-        DomHelper.appendChildren(rightTop, [settingsGrpRight]);
+        DomHelper.appendChildren(rightTop, [settingsButtonGroup]);
 
         let minimizeButton = this.getMinimizeButton();
         document.body.appendChild(minimizeButton);
@@ -230,28 +230,41 @@ export class UI {
         this.pauseButton.classList.remove("selected");
     }
 
+    setVolumeSliderLabelText = () => {
+        this.volumeSliderlabel.innerHTML = "Master Volume" + "<span style='float: right'>" + this.volumeSlider.value + "%</span>";
+    };
+
     getVolumeButtonGroup() {
         this.volumeGroup = document.getElementById("volumeButtonGroup");
 
         this.volumeSlider = document.getElementById("volumeSlider");
+        this.muteButton = document.getElementById("muteButton");
+        this.volumeSliderlabel = document.getElementById("volumeSliderlabel");
 
+        // set the default volume
         this.volumeSlider.value = this.defaultPLayerVolume;
         getPlayer().volume = this.defaultPLayerVolume;
+        this.setVolumeSliderLabelText();
+
+        this.toggleMuteClass = (oldIcon, newIcon) => {
+            this.muteButton.classList.remove(oldIcon);
+            this.muteButton.classList.add(newIcon);
+        };
 
         this.volumeSlider.onchange = (ev) => {
+            this.setVolumeSliderLabelText();
             if (getPlayer().volume == 0 && parseInt(ev.target.value) != 0) {
                 console.log(ev.target.value);
-                DomHelper.replaceGlyph(this.getMuteButton(), "volume-off", "volume-up");
+                this.toggleMuteClass("glyphicon-volume-off", "glyphicon-volume-up");
             }
             getPlayer().volume = parseInt(ev.target.value);
             if (getPlayer().volume <= 0) {
-                DomHelper.replaceGlyph(this.getMuteButton(), "volume-up", "volume-off");
+                this.toggleMuteClass("glyphicon-volume-up", "glyphicon-volume-off");
             } else if (this.getMuteButton().innerHTML == "Unmute") {
-                DomHelper.replaceGlyph(this.getMuteButton(), "volume-off", "volume-up");
+                this.toggleMuteClass("glyphicon-volume-off", "glyphicon-volume-up");
             }
         };
 
-        this.muteButton = document.getElementById("muteButton");
         this.muteButton.onclick = (ev) => {
             if (getPlayer().muted) {
                 getPlayer().muted = false;
@@ -262,14 +275,15 @@ export class UI {
                     this.volumeSlider.value = getPlayer().mutedAtVolume;
                     getPlayer().volume = getPlayer().mutedAtVolume;
                 }
-                DomHelper.replaceGlyph(this.muteButton, "volume-off", "volume-up");
+                this.toggleMuteClass("glyphicon-volume-off", "glyphicon-volume-up");
             } else {
                 getPlayer().mutedAtVolume = getPlayer().volume;
                 getPlayer().muted = true;
                 getPlayer().volume = 0;
                 this.volumeSlider.value = 0;
-                DomHelper.replaceGlyph(this.muteButton, "volume-up", "volume-off");
+                this.toggleMuteClass("glyphicon-volume-up", "glyphicon-volume-off");
             }
+            this.setVolumeSliderLabelText();
         };
 
         return this.volumeGroup;
@@ -309,9 +323,65 @@ export class UI {
     }
 
     getSettingsButtonGroup() {
-        let settingsGrpRight = DomHelper.createButtonGroup(true);
-        DomHelper.appendChildren(settingsGrpRight, [this.getFullscreenButton(), this.getSettingsButton()]);
-        return settingsGrpRight;
+        let settingsButtonGroup = DomHelper.createElement("div", { justifyContent: "space-around" }, { id: "settingsButtonGroup", className: "btn-group btn-group-vertical", role: "group" });
+        DomHelper.appendChildren(settingsButtonGroup, [this.getFullscreenButton(), this.getSettingsButton()]);
+        return settingsButtonGroup;
+    }
+
+    getFullscreenButton() {
+        if (!this.fullscreenButton) {
+            this.fullscreen = false;
+            let clickFullscreen = () => {
+                if (!this.fullscreen) {
+                    document.body.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            };
+            this.fullscreenButton = DomHelper.createGlyphiconButton("fullscreenButton", "fullscreen", clickFullscreen.bind(this));
+            let fullscreenSwitch = () => (this.fullscreen = !this.fullscreen);
+            document.body.onfullscreenchange = fullscreenSwitch.bind(this);
+        }
+        return this.fullscreenButton;
+    }
+
+    getSettingsButton() {
+        if (!this.settingsButton) {
+            this.settingsButton = DomHelper.createGlyphiconButton("settingsButton", "cog", () => {
+                if (this.settingsShown) {
+                    this.hideSettings();
+                } else {
+                    this.showSettings();
+                }
+            });
+        }
+        return this.settingsButton;
+    }
+
+    hideSettings() {
+        DomHelper.removeClass("selected", this.getSettingsButton());
+        this.settingsShown = false;
+        this.hideDiv(this.getSettingsDiv());
+    }
+
+    showSettings() {
+        this.hideAllDialogs();
+        DomHelper.addClassToElement("selected", this.getSettingsButton());
+        this.settingsShown = true;
+        this.showDiv(this.getSettingsDiv());
+    }
+
+    getSettingsDiv() {
+        if (!this.settingsDiv) {
+            this.settingsDiv = DomHelper.createDivWithIdAndClass("settingsDiv", "innerMenuDiv");
+            this.hideDiv(this.settingsDiv);
+            this.settingsDiv.appendChild(this.getSettingsContent());
+        }
+        return this.settingsDiv;
+    }
+
+    getSettingsContent() {
+        return getSettingsDiv();
     }
 
     setOnMenuHeightChange(func) {
@@ -348,19 +418,6 @@ export class UI {
         return document.getElementById("MainNavBar");
     }
 
-    getSettingsButton() {
-        if (!this.settingsButton) {
-            this.settingsButton = DomHelper.createGlyphiconButton("settingsButton", "cog", () => {
-                if (this.settingsShown) {
-                    this.hideSettings();
-                } else {
-                    this.showSettings();
-                }
-            });
-        }
-        return this.settingsButton;
-    }
-
     hideDiv(div) {
         div.classList.add("hidden");
         div.classList.remove("unhidden");
@@ -369,49 +426,6 @@ export class UI {
     showDiv(div) {
         div.classList.remove("hidden");
         div.classList.add("unhidden");
-    }
-
-    hideSettings() {
-        DomHelper.removeClass("selected", this.getSettingsButton());
-        this.settingsShown = false;
-        this.hideDiv(this.getSettingsDiv());
-    }
-
-    showSettings() {
-        this.hideAllDialogs();
-        DomHelper.addClassToElement("selected", this.getSettingsButton());
-        this.settingsShown = true;
-        this.showDiv(this.getSettingsDiv());
-    }
-
-    getSettingsDiv() {
-        if (!this.settingsDiv) {
-            this.settingsDiv = DomHelper.createDivWithIdAndClass("settingsDiv", "innerMenuDiv");
-            this.hideDiv(this.settingsDiv);
-            this.settingsDiv.appendChild(this.getSettingsContent());
-        }
-        return this.settingsDiv;
-    }
-
-    getSettingsContent() {
-        return getSettingsDiv();
-    }
-
-    getFullscreenButton() {
-        if (!this.fullscreenButton) {
-            this.fullscreen = false;
-            let clickFullscreen = () => {
-                if (!this.fullscreen) {
-                    document.body.requestFullscreen();
-                } else {
-                    document.exitFullscreen();
-                }
-            };
-            this.fullscreenButton = DomHelper.createGlyphiconButton("fullscreenButton", "fullscreen", clickFullscreen.bind(this));
-            let fullscreenSwitch = () => (this.fullscreen = !this.fullscreen);
-            document.body.onfullscreenchange = fullscreenSwitch.bind(this);
-        }
-        return this.fullscreenButton;
     }
 
     getLoadedSongsDiv() {

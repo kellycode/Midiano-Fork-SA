@@ -50,10 +50,10 @@ body {
 }
 .navbar {
     box-sizing: border-box;
-    transition: all 0.4s ease-out;
+    /* transition: all 0.4s ease-out; */
     max-height: 150px;
     background-color: black;
-    border: 3px ridge black;
+    border: 3px ridge #000;
     padding: 0.5em;
 }
 #minimizeMenu {
@@ -80,7 +80,7 @@ canvas {
     box-sizing: border-box;
     left: 0px;
     position: absolute;
-    border-bottom: 4px solid var(--borderColor);
+    border-bottom: 2px solid var(--borderColor);
     float: left;
     cursor: pointer;
     z-index: 10;
@@ -271,6 +271,8 @@ canvas {
     position: relative;
     box-sizing: border-box;
 
+    cursor: pointer;
+
     padding: 0.5em;
 
     text-align: center;
@@ -281,8 +283,9 @@ canvas {
     background-color: var(--buttonBgColor);
 
     outline: none;
-    border-radius: 1px;
-    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 3px;
+    /* border: 1px solid rgba(0, 0, 0, 1); */
+    box-sizing: border-box;
 
     transition: all 0.15s ease-out;
 
