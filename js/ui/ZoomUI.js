@@ -1,5 +1,4 @@
 import { getPlayer } from "../player/Player.js";
-import { DomHelper } from "./DomHelper.js";
 
 export class ZoomUI {
     constructor() {}

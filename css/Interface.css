@@ -48,6 +48,7 @@ body {
 .pcr-app:not(.visible) {
     display: none;
 }
+
 .navbar {
     box-sizing: border-box;
     /* transition: all 0.4s ease-out; */
@@ -56,21 +57,25 @@ body {
     border: 3px ridge #000;
     padding: 0.5em;
 }
+
 #minimizeMenu {
     position: absolute;
     right: 5px;
     transition: all 0.4s ease-out;
     cursor: pointer;
 }
-/* .zoomGroup {
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-} */
-.zoomGroup:hover,
-.pianoCanvas:hover ~ .zoomGroup {
-    z-index: 1055;
+
+.zoomGroup {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
+
+.zoomGroup .zoom-btn {
+    flex: 1 1 30%; /*grow | shrink | basis */
+}
+
 canvas {
     z-index: -5;
 }
@@ -84,6 +89,14 @@ canvas {
     float: left;
     cursor: pointer;
     z-index: 10;
+}
+
+#songControlGroup {
+    height: 50%;
+}
+
+#songControlGroup .btn {
+    height: 100%;
 }
 
 #settingsButtonGroup,
@@ -339,13 +352,7 @@ canvas {
 .no-wrap {
     white-space: nowrap;
 }
-.btn-zoom-left {
-    width: 12.5%;
-}
-.btn-zoom-right {
-    width: 21%;
-    white-space: nowrap;
-}
+
 .btn-wide {
     width: 100px;
 }

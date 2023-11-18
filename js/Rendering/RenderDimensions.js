@@ -7,6 +7,8 @@ const MIN_NOTE_NUMBER = 0;
 const MIN_WIDTH = 1040;
 const MIN_HEIGHT = 560;
 
+const WHITE_KEY_HEIGHT = 200;
+
 /**
  * Class to handle all the calculation of dimensions of the Notes & Keys on Screen-
  */
@@ -48,12 +50,14 @@ export class RenderDimensions {
             this.windowWidth / this.numberOfWhiteKeysShown;
         // )
 
-        this.whiteKeyHeight = this.windowHeight * 0.2;
+        this.whiteKeyHeight = WHITE_KEY_HEIGHT; //this.windowHeight * 0.2;
         this.blackKeyWidth = Math.floor(this.whiteKeyWidth * 0.5829787234);
         this.blackKeyHeight = Math.floor((this.whiteKeyHeight * 2) / 3) * (getSetting("blackKeyHeight") / 100);
 
         //Do this after computing blackKey, as its dependent on the white key size ( without adjusting for the setting )
         this.whiteKeyHeight *= getSetting("whiteKeyHeight") / 100;
+        console.log(getSetting("whiteKeyHeight") / 100);
+        console.log("wkh: " + this.whiteKeyHeight);
     }
 
     /**

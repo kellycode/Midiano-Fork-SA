@@ -14,6 +14,7 @@ export class PianoRender {
         this.blackKeyImg.src = "../../blackKey.svg";
         this.blackKeyImg.onload;
         this.positionY = 50; //from bottom
+        this.count = 0;
 
         this.resize();
     }
@@ -55,7 +56,7 @@ export class PianoRender {
 
     repositionCanvases() {
         this.getAllCanvases().forEach((canvas) => {
-            canvas.style.top = this.renderDimensions.getAbsolutePianoPosition() + "px";
+            canvas.style.bottom = "0px"; //this.renderDimensions.getAbsolutePianoPosition() + "px";
         });
     }
     /**

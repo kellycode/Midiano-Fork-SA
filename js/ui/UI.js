@@ -16,6 +16,14 @@ export class UI {
         this.songUI = new SongUI();
         this.loadedSongsShown = false;
 
+        this.songControlGroup = document.getElementById("songControlGroup");
+        this.fileButtonGroup = document.getElementById("fileButtonGroup");
+        this.tracksButtonGroup = document.getElementById("tracksButtonGroup");
+
+        this.leftTopContainer = document.getElementById("leftTopContainer");
+        this.middleTopContainer = document.getElementById("middleTopContainer");
+        this.rightTopContainer = document.getElementById("rightTopContainer");
+
         this.speedButtonGroup;
         this.speedUpButton;
         this.speedDisplayInput;
@@ -24,6 +32,10 @@ export class UI {
         this.volumeGroup;
         this.volumeSlider;
         this.muteButton;
+
+        this.settingsButtonGroup;
+        this.fullscreenButton;
+        this.settingsButton;
 
         this.defaultPLayerVolume = 75;
 
@@ -59,27 +71,18 @@ export class UI {
         }
     }
     createControlMenu() {
-        //let topGroupsContainer = DomHelper.createDivWithClass("container");
-        let topGroupsContainer = document.getElementById("MainNavBar").getElementsByClassName("container")[0];
-
-        let leftTop = document.getElementById("leftTopContainer");
-        let middleTop = document.getElementById("middleTopContainer");
-        let rightTop = document.getElementById("rightTopContainer");
-
         this.speedButtonGroup = this.getSpeedButtonGroup();
 
         this.volumeGroup = this.getVolumeButtonGroup();
-        let settingsButtonGroup = this.getSettingsButtonGroup();
+        this.settingsButtonGroup = this.getSettingsButtonGroup();
 
-        let songControlGroup = this.getSongControlButtonGroup();
+        this.startSongControlButtonGroup();
 
-        let fileGrp = this.getFileButtonGroup();
-        let trackGrp = this.getTracksButtonGroup();
+        this.startFileButtonGroup();
+        this.startTracksButtonGroup();
 
         // zoom buttons added to the middleTopContainer
         let zoomGroup = new ZoomUI().getContentDiv(this.render);
-
-        DomHelper.appendChildren(rightTop, [settingsButtonGroup]);
 
         let minimizeButton = this.getMinimizeButton();
         document.body.appendChild(minimizeButton);
@@ -91,16 +94,12 @@ export class UI {
         this.createFileDragArea();
     }
 
-    getFileButtonGroup() {
-        let fileGroup = document.getElementById("fileButtonGroup");
-
+    startFileButtonGroup() {
         let hiddenInput = document.getElementById("hiddenFileInput");
         hiddenInput.onchange = this.handleFileSelect.bind(this);
 
         this.loadedSongsButton = document.getElementById("loadedSongsButton");
         this.loadedSongsButton.onclick = this.toggleLoadedSongsDiv.bind(this);
-
-        return fileGroup;
     }
 
     toggleLoadedSongsDiv() {
@@ -139,9 +138,7 @@ export class UI {
         reader.readAsDataURL(file);
     }
 
-    getTracksButtonGroup() {
-        let trackGrp = document.getElementById("tracksButtonGroup");
-
+    startTracksButtonGroup() {
         this.tracksButton = document.getElementById("tracksButton");
         this.tracksButton.onclick = (ev) => {
             if (this.tracksShown) {
@@ -159,8 +156,6 @@ export class UI {
                 this.showMidiSetupDialog();
             }
         };
-
-        return trackGrp;
     }
 
     hideTracks() {
@@ -195,9 +190,7 @@ export class UI {
         this.showDiv(this.getMidiSetupDialog());
     }
 
-    getSongControlButtonGroup() {
-        let songControlGroup = document.getElementById("songControlGroup");
-
+    startSongControlButtonGroup() {
         this.playButton = document.getElementById("songControlGroupPlay");
         this.playButton.onclick = this.clickPlay.bind(this);
 
@@ -206,8 +199,6 @@ export class UI {
 
         this.stopButton = document.getElementById("songControlGroupStop");
         this.stopButton.onclick = this.clickStop.bind(this);
-
-        return songControlGroup;
     }
 
     clickPlay(ev) {
@@ -230,7 +221,7 @@ export class UI {
         this.pauseButton.classList.remove("selected");
     }
 
-    setVolumeSliderLabelText = () => {
+    updateVolumeSlider = () => {
         this.volumeSliderlabel.innerHTML = "Master Volume" + "<span style='float: right'>" + this.volumeSlider.value + "%</span>";
     };
 
@@ -244,15 +235,19 @@ export class UI {
         // set the default volume
         this.volumeSlider.value = this.defaultPLayerVolume;
         getPlayer().volume = this.defaultPLayerVolume;
-        this.setVolumeSliderLabelText();
+        this.updateVolumeSlider();
 
         this.toggleMuteClass = (oldIcon, newIcon) => {
             this.muteButton.classList.remove(oldIcon);
             this.muteButton.classList.add(newIcon);
         };
 
+        this.volumeSlider.oninput = () => {
+            this.updateVolumeSlider();
+        };
+
         this.volumeSlider.onchange = (ev) => {
-            this.setVolumeSliderLabelText();
+            this.updateVolumeSlider();
             if (getPlayer().volume == 0 && parseInt(ev.target.value) != 0) {
                 console.log(ev.target.value);
                 this.toggleMuteClass("glyphicon-volume-off", "glyphicon-volume-up");
@@ -283,7 +278,7 @@ export class UI {
                 this.volumeSlider.value = 0;
                 this.toggleMuteClass("glyphicon-volume-up", "glyphicon-volume-off");
             }
-            this.setVolumeSliderLabelText();
+            this.updateVolumeSlider();
         };
 
         return this.volumeGroup;
@@ -323,39 +318,41 @@ export class UI {
     }
 
     getSettingsButtonGroup() {
-        let settingsButtonGroup = DomHelper.createElement("div", { justifyContent: "space-around" }, { id: "settingsButtonGroup", className: "btn-group btn-group-vertical", role: "group" });
-        DomHelper.appendChildren(settingsButtonGroup, [this.getFullscreenButton(), this.getSettingsButton()]);
+        this.settingsButtonGroup = document.getElementById("settingsButtonGroup");
+        this.fullscreenButton = document.getElementById("fullscreenButton");
+        this.settingsButton = document.getElementById("settingsButton");
+
+        this.startFullscreenButton();
+        this.startSettingsButton();
+
         return settingsButtonGroup;
     }
 
-    getFullscreenButton() {
-        if (!this.fullscreenButton) {
-            this.fullscreen = false;
-            let clickFullscreen = () => {
-                if (!this.fullscreen) {
-                    document.body.requestFullscreen();
-                } else {
-                    document.exitFullscreen();
-                }
-            };
-            this.fullscreenButton = DomHelper.createGlyphiconButton("fullscreenButton", "fullscreen", clickFullscreen.bind(this));
-            let fullscreenSwitch = () => (this.fullscreen = !this.fullscreen);
-            document.body.onfullscreenchange = fullscreenSwitch.bind(this);
-        }
-        return this.fullscreenButton;
+    getSettingsButton() {
+        return this.settingsButton;
     }
 
-    getSettingsButton() {
-        if (!this.settingsButton) {
-            this.settingsButton = DomHelper.createGlyphiconButton("settingsButton", "cog", () => {
-                if (this.settingsShown) {
-                    this.hideSettings();
-                } else {
-                    this.showSettings();
-                }
-            });
-        }
-        return this.settingsButton;
+    startFullscreenButton() {
+        this.fullscreen = false;
+        this.fullscreenButton.onclick = () => {
+            if (!this.fullscreen) {
+                document.body.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        };
+        let fullscreenSwitch = () => (this.fullscreen = !this.fullscreen);
+        document.body.onfullscreenchange = fullscreenSwitch.bind(this);
+    }
+
+    startSettingsButton() {
+        this.settingsButton.onclick = () => {
+            if (this.settingsShown) {
+                this.hideSettings();
+            } else {
+                this.showSettings();
+            }
+        };
     }
 
     hideSettings() {

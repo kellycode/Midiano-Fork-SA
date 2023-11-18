@@ -29,6 +29,8 @@ class Player {
         this.volume = 100;
         this.mutedAtVolume = 100;
         this.soundfontName = getSetting("soundfontName");
+        // defaults are loaded in AudioPlayer.js
+        // this is used when piano keys are pressed
         this.inputInstrument = "acoustic_grand_piano";
         this.lastMicNote = -1;
 
