@@ -82,6 +82,7 @@ export class UI {
             }, 1000);
         }
     }
+
     createControlMenu() {
         this.startSpeedButtonGroup();
 
@@ -300,32 +301,6 @@ export class UI {
         return this.muteButton;
     }
 
-    getMinimizeButton() {
-        if (!this.minimizeButton) {
-            this.minimizeButton = DomHelper.createGlyphiconButton("minimizeMenu", "chevron-up", () => {
-                if (!this.navMinimized) {
-                    this.navBar.style.marginTop = "-" + this.navBar.clientHeight + "px";
-                    this.navMinimized = true;
-                    this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-up");
-                    this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-down");
-                    this.onMenuHeightChange(0);
-                } else {
-                    this.navBar.style.marginTop = "0px";
-                    this.navMinimized = false;
-
-                    this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-up");
-                    this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-down");
-                    this.onMenuHeightChange(this.navBar.clientHeight);
-                }
-            });
-            this.minimizeButton.style.padding = "0px";
-            this.minimizeButton.style.fontSize = "0.5em";
-        }
-        let navbarHeight = this.navMinimized ? 0 : this.navBar.clientHeight;
-        this.minimizeButton.style.top = navbarHeight + 23 + "px";
-        return this.minimizeButton;
-    }
-
     startSettingsButtonGroup() {
         this.startFullscreenButton();
         this.startSettingsButton();
@@ -428,6 +403,7 @@ export class UI {
                 transition: "all 0.2s ease-out",
             },
             {
+                id: "fileDragArea",
                 draggable: "true",
             }
         );
@@ -547,6 +523,7 @@ export class UI {
         menuDiv.innerHTML = "";
         DomHelper.appendChildren(menuDiv, createTrackDivs());
     }
+
     newSongCallback() {
         this.resetTrackMenuDiv();
         this.clickStop();
@@ -595,6 +572,7 @@ export class UI {
         this.midiSetupDialog.style.marginTop = this.navBar.clientHeight + 25 + "px";
         return this.midiSetupDialog;
     }
+
     createDeviceDiv(device) {
         let deviceDiv = DomHelper.createTextButton("midiInDeviceDiv" + device.id, device.name, () => {
             if (deviceDiv.classList.contains("selected")) {
@@ -611,6 +589,7 @@ export class UI {
 
         return deviceDiv;
     }
+
     createOutputDeviceDiv(device) {
         let deviceDiv = DomHelper.createTextButton("midiOutDeviceDiv" + device.id, device.name, () => {
             if (deviceDiv.classList.contains("selected")) {
@@ -629,11 +608,38 @@ export class UI {
 
         return deviceDiv;
     }
+
     getTrackMenuDiv() {
         if (!this.trackMenuDiv) {
             this.trackMenuDiv = DomHelper.createDivWithIdAndClass("trackContainerDiv", "innerMenuDiv");
             this.hideDiv(this.trackMenuDiv);
         }
         return this.trackMenuDiv;
+    }
+
+    getMinimizeButton() {
+        if (!this.minimizeButton) {
+            this.minimizeButton = DomHelper.createGlyphiconButton("minimizeMenu", "chevron-up", () => {
+                if (!this.navMinimized) {
+                    this.navBar.style.marginTop = "-" + this.navBar.clientHeight + "px";
+                    this.navMinimized = true;
+                    this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-up");
+                    this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-down");
+                    this.onMenuHeightChange(0);
+                } else {
+                    this.navBar.style.marginTop = "0px";
+                    this.navMinimized = false;
+
+                    this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-up");
+                    this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-down");
+                    this.onMenuHeightChange(this.navBar.clientHeight);
+                }
+            });
+            this.minimizeButton.style.padding = "0px";
+            this.minimizeButton.style.fontSize = "0.5em";
+        }
+        let navbarHeight = this.navMinimized ? 0 : this.navBar.clientHeight;
+        this.minimizeButton.style.top = navbarHeight + 23 + "px";
+        return this.minimizeButton;
     }
 }
