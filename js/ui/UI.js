@@ -16,26 +16,38 @@ export class UI {
         this.songUI = new SongUI();
         this.loadedSongsShown = false;
 
+        this.navBar = document.getElementById("MainNavBar");
+
         this.songControlGroup = document.getElementById("songControlGroup");
         this.fileButtonGroup = document.getElementById("fileButtonGroup");
         this.tracksButtonGroup = document.getElementById("tracksButtonGroup");
+        this.tracksButton = document.getElementById("tracksButton");
+        this.midiSetupButton = document.getElementById("midiSetupButton");
 
         this.leftTopContainer = document.getElementById("leftTopContainer");
         this.middleTopContainer = document.getElementById("middleTopContainer");
         this.rightTopContainer = document.getElementById("rightTopContainer");
 
-        this.speedButtonGroup;
-        this.speedUpButton;
-        this.speedDisplayInput;
-        this.speedDownButton;
+        this.loadedSongsButton = document.getElementById("loadedSongsButton");
+        this.hiddenFileInput = document.getElementById("hiddenFileInput");
 
-        this.volumeGroup;
-        this.volumeSlider;
-        this.muteButton;
+        this.playButton = document.getElementById("songControlGroupPlay");
+        this.pauseButton = document.getElementById("songControlGroupPause");
+        this.stopButton = document.getElementById("songControlGroupStop");
 
-        this.settingsButtonGroup;
-        this.fullscreenButton;
-        this.settingsButton;
+        this.volumeGroup = document.getElementById("volumeButtonGroup");
+        this.volumeSlider = document.getElementById("volumeSlider");
+        this.muteButton = document.getElementById("muteButton");
+        this.volumeSliderlabel = document.getElementById("volumeSliderlabel");
+
+        this.speedButtonGroup = document.getElementById("speedButtonGroup");
+        this.speedUpButton = document.getElementById("speedUpButton");
+        this.speedDisplayInput = document.getElementById("speedDisplayInput");
+        this.speedDownButton = document.getElementById("speedDownButton");
+
+        this.settingsButtonGroup = document.getElementById("settingsButtonGroup");
+        this.fullscreenButton = document.getElementById("fullscreenButton");
+        this.settingsButton = document.getElementById("settingsButton");
 
         this.defaultPLayerVolume = 75;
 
@@ -48,7 +60,7 @@ export class UI {
 
         this.menuHeight = 200;
 
-        document.querySelectorAll(".innerMenuDiv").forEach((el) => (el.style.height = "calc(100% - " + (this.getNavBar().clientHeight + 24) + "px)"));
+        document.querySelectorAll(".innerMenuDiv").forEach((el) => (el.style.height = "calc(100% - " + (this.navBar.clientHeight + 24) + "px)"));
     }
 
     setExampleSongs(exampleSongsJson) {
@@ -56,8 +68,8 @@ export class UI {
     }
 
     fireInitialListeners() {
-        this.onMenuHeightChange(this.getNavBar().clientHeight);
-        window.setTimeout(() => this.onMenuHeightChange(this.getNavBar().clientHeight), 500);
+        this.onMenuHeightChange(this.navBar.clientHeight);
+        window.setTimeout(() => this.onMenuHeightChange(this.navBar.clientHeight), 500);
     }
 
     mouseMoved() {
@@ -71,13 +83,12 @@ export class UI {
         }
     }
     createControlMenu() {
-        this.speedButtonGroup = this.getSpeedButtonGroup();
+        this.startSpeedButtonGroup();
 
-        this.volumeGroup = this.getVolumeButtonGroup();
-        this.settingsButtonGroup = this.getSettingsButtonGroup();
+        this.volumeGroup = this.startVolumeButtonGroup();
+        this.settingsButtonGroup = this.startSettingsButtonGroup();
 
         this.startSongControlButtonGroup();
-
         this.startFileButtonGroup();
         this.startTracksButtonGroup();
 
@@ -94,11 +105,24 @@ export class UI {
         this.createFileDragArea();
     }
 
-    startFileButtonGroup() {
-        let hiddenInput = document.getElementById("hiddenFileInput");
-        hiddenInput.onchange = this.handleFileSelect.bind(this);
+    startSpeedButtonGroup() {
+        this.speedUpButton.onclick = function () {
+            getPlayer().increaseSpeed(0.05);
+            this.updateSpeedDisplayValue();
+        }.bind(this);
 
-        this.loadedSongsButton = document.getElementById("loadedSongsButton");
+        this.speedDisplayInput.value = Math.floor(getPlayer().playbackSpeed * 100) + "%";
+
+        this.speedDownButton.onclick = function () {
+            getPlayer().increaseSpeed(-0.05);
+            this.updateSpeedDisplayValue();
+        }.bind(this);
+
+        return speedButtonGroup;
+    }
+
+    startFileButtonGroup() {
+        this.hiddenFileInput.onchange = this.handleFileSelect.bind(this);
         this.loadedSongsButton.onclick = this.toggleLoadedSongsDiv.bind(this);
     }
 
@@ -139,7 +163,6 @@ export class UI {
     }
 
     startTracksButtonGroup() {
-        this.tracksButton = document.getElementById("tracksButton");
         this.tracksButton.onclick = (ev) => {
             if (this.tracksShown) {
                 this.hideTracks();
@@ -148,7 +171,6 @@ export class UI {
             }
         };
 
-        this.midiSetupButton = document.getElementById("midiSetupButton");
         this.midiSetupButton.onclick = (ev) => {
             if (this.midiSetupDialogShown) {
                 this.hideMidiSetupDialog();
@@ -176,7 +198,6 @@ export class UI {
     }
 
     hideMidiSetupDialog() {
-        //DomHelper.removeClass("selected", this.midiSetupButton);
         this.midiSetupButton.classList.remove("selected");
         this.midiSetupDialogShown = false;
         this.hideDiv(this.getMidiSetupDialog());
@@ -185,19 +206,13 @@ export class UI {
     showMidiSetupDialog() {
         this.hideAllDialogs();
         this.midiSetupButton.classList.add("selected");
-        //DomHelper.addClassToElement("selected", this.midiSetupButton);
         this.midiSetupDialogShown = true;
         this.showDiv(this.getMidiSetupDialog());
     }
 
     startSongControlButtonGroup() {
-        this.playButton = document.getElementById("songControlGroupPlay");
         this.playButton.onclick = this.clickPlay.bind(this);
-
-        this.pauseButton = document.getElementById("songControlGroupPause");
         this.pauseButton.onclick = this.clickPause.bind(this);
-
-        this.stopButton = document.getElementById("songControlGroupStop");
         this.stopButton.onclick = this.clickStop.bind(this);
     }
 
@@ -225,13 +240,7 @@ export class UI {
         this.volumeSliderlabel.innerHTML = "Master Volume" + "<span style='float: right'>" + this.volumeSlider.value + "%</span>";
     };
 
-    getVolumeButtonGroup() {
-        this.volumeGroup = document.getElementById("volumeButtonGroup");
-
-        this.volumeSlider = document.getElementById("volumeSlider");
-        this.muteButton = document.getElementById("muteButton");
-        this.volumeSliderlabel = document.getElementById("volumeSliderlabel");
-
+    startVolumeButtonGroup() {
         // set the default volume
         this.volumeSlider.value = this.defaultPLayerVolume;
         getPlayer().volume = this.defaultPLayerVolume;
@@ -295,37 +304,31 @@ export class UI {
         if (!this.minimizeButton) {
             this.minimizeButton = DomHelper.createGlyphiconButton("minimizeMenu", "chevron-up", () => {
                 if (!this.navMinimized) {
-                    this.getNavBar().style.marginTop = "-" + this.getNavBar().clientHeight + "px";
+                    this.navBar.style.marginTop = "-" + this.navBar.clientHeight + "px";
                     this.navMinimized = true;
                     this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-up");
                     this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-down");
                     this.onMenuHeightChange(0);
                 } else {
-                    this.getNavBar().style.marginTop = "0px";
+                    this.navBar.style.marginTop = "0px";
                     this.navMinimized = false;
 
                     this.minimizeButton.querySelector("span").classList.add("glyphicon-chevron-up");
                     this.minimizeButton.querySelector("span").classList.remove("glyphicon-chevron-down");
-                    this.onMenuHeightChange(this.getNavBar().clientHeight);
+                    this.onMenuHeightChange(this.navBar.clientHeight);
                 }
             });
             this.minimizeButton.style.padding = "0px";
             this.minimizeButton.style.fontSize = "0.5em";
         }
-        let navbarHeight = this.navMinimized ? 0 : this.getNavBar().clientHeight;
+        let navbarHeight = this.navMinimized ? 0 : this.navBar.clientHeight;
         this.minimizeButton.style.top = navbarHeight + 23 + "px";
         return this.minimizeButton;
     }
 
-    getSettingsButtonGroup() {
-        this.settingsButtonGroup = document.getElementById("settingsButtonGroup");
-        this.fullscreenButton = document.getElementById("fullscreenButton");
-        this.settingsButton = document.getElementById("settingsButton");
-
+    startSettingsButtonGroup() {
         this.startFullscreenButton();
         this.startSettingsButton();
-
-        return settingsButtonGroup;
     }
 
     getSettingsButton() {
@@ -388,31 +391,6 @@ export class UI {
     updateSpeedDisplayValue() {
         let speed = getPlayer().playbackSpeed;
         this.speedDisplayInput.value = Math.floor(speed * 100) + "%";
-    }
-
-    getSpeedButtonGroup() {
-        this.speedButtonGroup = document.getElementById("speedButtonGroup");
-
-        this.speedUpButton = document.getElementById("speedUpButton");
-        this.speedUpButton.onclick = function () {
-            getPlayer().increaseSpeed(0.05);
-            this.updateSpeedDisplayValue();
-        }.bind(this);
-
-        this.speedDisplayInput = document.getElementById("speedDisplayInput");
-        this.speedDisplayInput.value = Math.floor(getPlayer().playbackSpeed * 100) + "%";
-
-        this.speedDownButton = document.getElementById("speedDownButton");
-        this.speedDownButton.onclick = function () {
-            getPlayer().increaseSpeed(-0.05);
-            this.updateSpeedDisplayValue();
-        }.bind(this);
-
-        return speedButtonGroup;
-    }
-
-    getNavBar() {
-        return document.getElementById("MainNavBar");
     }
 
     hideDiv(div) {
@@ -536,7 +514,7 @@ export class UI {
         if (!this.channelMenuDiv) {
             this.channelMenuDiv = DomHelper.createDivWithId("trackContainerDiv");
             this.channelMenuDiv.style.display = "none";
-            this.channelMenuDiv.style.top = this.getNavBar().style.height;
+            this.channelMenuDiv.style.top = this.navBar.style.height;
             document.body.appendChild(this.channelMenuDiv);
         }
         return this.channelMenuDiv;
@@ -614,7 +592,7 @@ export class UI {
                 this.outputDevicesDiv.appendChild(this.createOutputDeviceDiv(device));
             });
         }
-        this.midiSetupDialog.style.marginTop = this.getNavBar().clientHeight + 25 + "px";
+        this.midiSetupDialog.style.marginTop = this.navBar.clientHeight + 25 + "px";
         return this.midiSetupDialog;
     }
     createDeviceDiv(device) {
