@@ -33,6 +33,6 @@ function renderLoop() {
 }
 async function loadStartingSong() {
     const domain = window.location.href;
-    let url = "./midi/xmastime.mid?raw=true";
+    let url = "./midi/Christmas Time Is Here.mid?raw=true";
     FileLoader.loadSongFromURL(url, (response, fileName) => getPlayer().loadSong(response, fileName, "Christmas Time Is here")); // Local: "../mz_331_3.mid")
 }

@@ -1,5 +1,10 @@
 [
     {
+        "name": "Christmas Time is Here",
+        "fileName": "Christmas Time Is Here.mid",
+        "url": "./midi/Christmas Time Is Here.mid?raw=true"
+    },
+    {
         "name": "Liszt - La Campanella",
         "fileName": "liz_et3.mid",
         "url": "./midi/liz_et3.mid?raw=true"
