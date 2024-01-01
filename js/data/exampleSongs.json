@@ -1,5 +1,10 @@
 [
     {
+        "name": "Dante's Prayer",
+        "fileName": "Dante's Prayer.mid",
+        "url": "./midi/Dante's Prayer.mid?raw=true"
+    },
+    {
         "name": "Christmas Time is Here",
         "fileName": "Christmas Time Is Here.mid",
         "url": "./midi/Christmas Time Is Here.mid?raw=true"
