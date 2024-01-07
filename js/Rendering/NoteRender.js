@@ -2,6 +2,7 @@ import { getSetting, setSettingCallback } from "../settings/Settings.js";
 import { drawRoundRect } from "../Util.js";
 import { NoteParticleRender } from "./NoteParticleRender.js";
 import { PianoParticleRender } from "./PianoParticleRender.js";
+import { CONST } from "../data/CONST.js";
 
 /**
  * Class to render the notes on screen.
@@ -15,7 +16,11 @@ export class NoteRender {
         this.pianoRender = pianoRender;
         this.lastActiveNotes = {};
         this.noteParticleRender = new NoteParticleRender(this.ctxForeground, this.renderDimensions);
-        this.pianoParticleRender = new PianoParticleRender(this.pianoRender.playedKeysCtxWhite, this.pianoRender.playedKeysCtxBlack, this.renderDimensions);
+        this.pianoParticleRender = new PianoParticleRender(
+            this.pianoRender.playedKeysCtxWhite,
+            this.pianoRender.playedKeysCtxBlack,
+            this.renderDimensions
+        );
     }
     render(time, renderInfoByTrackMap, inputActiveNotes, inputPlayedNotes) {
         this.noteParticleRender.render();
@@ -85,7 +90,9 @@ export class NoteRender {
     }
 
     getActiveNotesByTrackMap(renderInfoByTrackMap) {
-        return Object.keys(renderInfoByTrackMap).map((trackIndex) => this.getActiveNotes(renderInfoByTrackMap[trackIndex].black, renderInfoByTrackMap[trackIndex].white));
+        return Object.keys(renderInfoByTrackMap).map((trackIndex) =>
+            this.getActiveNotes(renderInfoByTrackMap[trackIndex].black, renderInfoByTrackMap[trackIndex].white)
+        );
     }
     getActiveNotes(notesRenderInfoBlack, notesRenderInfoWhite) {
         let activeNotesBlack = notesRenderInfoBlack.slice(0).filter((renderInfo) => renderInfo.isOn);
@@ -111,7 +118,10 @@ export class NoteRender {
     renderActiveNoteEffect(renderInfos) {
         let ctx = this.ctx;
         ctx.globalAlpha = Math.max(0, 0.7 - Math.min(0.7, renderInfos.noteDoneRatio));
-        let wOffset = Math.pow(this.renderDimensions.whiteKeyWidth / 2, 1 + Math.min(1, renderInfos.noteDoneRatio) * renderInfos.isOn);
+        let wOffset = Math.pow(
+            this.renderDimensions.whiteKeyWidth / 2,
+            1 + Math.min(1, renderInfos.noteDoneRatio) * renderInfos.isOn
+        );
         this.doNotePath(renderInfos, {
             x: renderInfos.x - wOffset / 2,
             w: renderInfos.w + wOffset,
@@ -124,7 +134,8 @@ export class NoteRender {
     }
 
     drawNotes(notesRenderInfoWhite, notesRenderInfoBlack) {
-        let { incomingWhiteNotes, incomingBlackNotes, playedWhiteNotes, playedBlackNotes } = this.getIncomingAndPlayedNotes(notesRenderInfoWhite, notesRenderInfoBlack);
+        let { incomingWhiteNotes, incomingBlackNotes, playedWhiteNotes, playedBlackNotes } =
+            this.getIncomingAndPlayedNotes(notesRenderInfoWhite, notesRenderInfoBlack);
 
         this.ctx.globalAlpha = 1;
         this.ctx.strokeStyle = getSetting("strokeNotesColor");
@@ -143,7 +154,8 @@ export class NoteRender {
             0,
             this.renderDimensions.getAbsolutePianoPosition() + this.renderDimensions.whiteKeyHeight,
             this.renderDimensions.windowWidth,
-            this.renderDimensions.windowHeight - (this.renderDimensions.getAbsolutePianoPosition() + this.renderDimensions.whiteKeyHeight)
+            this.renderDimensions.windowHeight -
+                (this.renderDimensions.getAbsolutePianoPosition() + this.renderDimensions.whiteKeyHeight)
         );
     }
     drawPlayedNotes(playedWhiteNotes, playedBlackNotes) {
@@ -183,16 +195,51 @@ export class NoteRender {
         }
     }
 
+    drawNoteName(renderInfo) {
+        let ctx = this.ctx;
+        let fs = ctx.fillStyle;
+        let currentNote = CONST.MIDI_NOTE_TO_KEY[renderInfo.noteNumber + 21];
+        // we don't need the flat or sharp as it should be obvious and doesn't fit anyway
+        let textRemove = renderInfo.isBlack ? 2 : 1;
+        // remove the note octave number and flat/sharp
+        currentNote = currentNote.substring(0, currentNote.length - textRemove);
+
+        ctx.font = "bold 18px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#444444";
+
+        let rectWidth = renderInfo.w;
+        let rectX = renderInfo.x;
+        let rectY = renderInfo.y;
+
+        // get the note text height
+        let metrics = ctx.measureText(currentNote);
+        let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+
+        ctx.fillText(currentNote, rectX + rectWidth / 2, rectY + renderInfo.h - fontHeight / 2);
+        ctx.fillStyle = fs;
+    }
+
     drawIncomingNotes(incomingWhiteNotes, incomingBlackNotes) {
         this.ctx.save();
+        if (incomingWhiteNotes.length !== 0) {
+            //console.log(incomingWhiteNotes[0].noteId)
+        }
         this.ctx.beginPath();
         getSetting("reverseNoteDirection") ? this.rectBelowPiano() : this.rectAbovePiano();
         this.ctx.clip();
         this.ctx.closePath();
         this.ctx.fillStyle = incomingWhiteNotes.length ? incomingWhiteNotes[0].fillStyle : "";
+
         incomingWhiteNotes.forEach((renderInfo) => {
             this.drawNoteBefore(renderInfo);
             this.ctx.fill();
+
+            //START Text drawing experiment
+            this.drawNoteName(renderInfo)
+            //END Text drawing experiment
+
             this.strokeActiveAndOthers(renderInfo);
         });
 
@@ -200,6 +247,11 @@ export class NoteRender {
         incomingBlackNotes.forEach((renderInfo) => {
             this.drawNoteBefore(renderInfo);
             this.ctx.fill();
+
+            //START Text drawing experiment
+            this.drawNoteName(renderInfo)
+            //END Text drawing experiment
+
             this.strokeActiveAndOthers(renderInfo);
         });
         this.ctx.restore();
@@ -256,6 +308,8 @@ export class NoteRender {
             this.ctx.fill();
         });
     }
+
+    //  does anything?
     drawNote(renderInfos) {
         let ctx = this.ctx;
 
@@ -353,7 +407,15 @@ export class NoteRender {
             }
         }
         if (getSetting("roundedNotes") || getSetting("noteBorderRadius") > 0) {
-            drawRoundRect(this.ctx, overWriteParams.x, overWriteParams.y, overWriteParams.w, overWriteParams.h, overWriteParams.rad, getSetting("roundedNotes"));
+            drawRoundRect(
+                this.ctx,
+                overWriteParams.x,
+                overWriteParams.y,
+                overWriteParams.w,
+                overWriteParams.h,
+                overWriteParams.rad,
+                getSetting("roundedNotes")
+            );
         } else {
             this.ctx.beginPath();
             this.ctx.rect(overWriteParams.x, overWriteParams.y, overWriteParams.w, overWriteParams.h);
@@ -380,7 +442,10 @@ export class NoteRender {
 
     getAlphaFromY(y) {
         //TODO broken.
-        return Math.min(1, Math.max(0, (y - this.menuHeight - 5) / ((this.renderDimensions.windowHeight - this.menuHeight) * 0.5)));
+        return Math.min(
+            1,
+            Math.max(0, (y - this.menuHeight - 5) / ((this.renderDimensions.windowHeight - this.menuHeight) * 0.5))
+        );
     }
     /**
      * Sets Menu (Navbar) Height.  Required to calculate fadeIn alpha value
