@@ -1,5 +1,10 @@
 [
     {
+        "name": "Dragonborn",
+        "fileName": "Dragonborn-Export-Piano.mid",
+        "url": "./midi/Dragonborn-Export-Piano.mid?raw=true"
+    },
+    {
         "name": "Dante's Prayer",
         "fileName": "Dante's Prayer.mid",
         "url": "./midi/Dante's Prayer.mid?raw=true"
