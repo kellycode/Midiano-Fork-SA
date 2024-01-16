@@ -8,6 +8,7 @@ import { FileLoader } from "./player/FileLoader.js";
 let ui;
 let loading;
 let listeners;
+let examplesJson;
 
 window.onload = async function () {
     await init();
@@ -18,11 +19,16 @@ async function init() {
     render = new Render();
     ui = new UI(render);
     listeners = new InputListeners(ui, render);
+
     renderLoop();
 
-    loadStartingSong();
+    loadJson("./js/data/exampleSongs.json", (json) => {
+        let parsedJson = JSON.parse(json);
+        ui.setExampleSongs(parsedJson)
+        loadStartingSong(parsedJson);
+    });
 
-    loadJson("./js/data/exampleSongs.json", (json) => ui.setExampleSongs(JSON.parse(json)));
+    
 }
 
 let render;
@@ -31,8 +37,9 @@ function renderLoop() {
     render.render(getPlayerState());
     window.requestAnimationFrame(renderLoop);
 }
-async function loadStartingSong() {
+async function loadStartingSong(parsedJson) {
     const domain = window.location.href;
-    let url = "./midi/Dragonborn-Export-Piano.mid?raw=true";
-    FileLoader.loadSongFromURL(url, (response, fileName) => getPlayer().loadSong(response, fileName, "Dragonborn-Export-Piano")); // Local: "../mz_331_3.mid")
+    // always start with the first song listed in exampleSongs.json
+    let url = parsedJson[0].url;
+    FileLoader.loadSongFromURL(url, (response, fileName) => getPlayer().loadSong(response, fileName, parsedJson[0].name));
 }
