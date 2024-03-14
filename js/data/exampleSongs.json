@@ -1,5 +1,10 @@
 [
     {
+        "name": "Passacaglia",
+        "fileName": "Passacaglia.mid",
+        "url": "./midi/Passacaglia.mid?raw=true"
+    },
+    {
         "name": "A Spring Without You",
         "fileName": "A Spring Without You.mid",
         "url": "./midi/A Spring Without You.mid?raw=true"
