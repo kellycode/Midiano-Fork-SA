@@ -1,5 +1,10 @@
 [
     {
+        "name": "The Entertainer",
+        "fileName": "The Entertainer.mid",
+        "url": "./midi/The Entertainer.mid?raw=true"
+    },
+    {
         "name": "Passacaglia",
         "fileName": "Passacaglia.mid",
         "url": "./midi/Passacaglia.mid?raw=true"
