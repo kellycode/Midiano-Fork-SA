@@ -5,6 +5,11 @@
         "url": "./midi/The Entertainer.mid?raw=true"
     },
     {
+        "name": "The Ash Grove",
+        "fileName": "The Ash Grove.mid",
+        "url": "./midi/The Ash Grove.mid?raw=true"
+    },
+    {
         "name": "Passacaglia",
         "fileName": "Passacaglia.mid",
         "url": "./midi/Passacaglia.mid?raw=true"
