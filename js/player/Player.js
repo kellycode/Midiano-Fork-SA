@@ -365,6 +365,7 @@ class Player {
     }
 
     pause() {
+        // double calls onload
         console.log("Pausing Song");
         this.pauseTime = this.getTime();
         this.paused = true;

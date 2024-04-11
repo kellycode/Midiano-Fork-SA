@@ -17,6 +17,7 @@ export const setupTracks = activeTracks => {
 		if (!theTracks.hasOwnProperty(trackId)) {
 			theTracks[trackId] = {
 				draw: true,
+				// trackId % 4 needs some explanation
 				color: CONST.TRACK_COLORS[trackId % 4],
 				volume: 100,
 				name: activeTracks[trackId].name || "Track " + trackId,
@@ -24,9 +25,6 @@ export const setupTracks = activeTracks => {
 				index: trackId
 			}
 		}
-		console.log(theTracks[trackId].color)
-		console.log(trackId)
-		console.log(trackId % 4)
 		theTracks[trackId].color = CONST.TRACK_COLORS[trackId % 4]
 	}
 }

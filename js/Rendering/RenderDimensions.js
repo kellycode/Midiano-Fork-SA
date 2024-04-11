@@ -56,8 +56,8 @@ export class RenderDimensions {
 
         //Do this after computing blackKey, as its dependent on the white key size ( without adjusting for the setting )
         this.whiteKeyHeight *= getSetting("whiteKeyHeight") / 100;
-        console.log(getSetting("whiteKeyHeight") / 100);
-        console.log("wkh: " + this.whiteKeyHeight);
+        //console.log(getSetting("whiteKeyHeight") / 100);
+        //console.log("wkh: " + this.whiteKeyHeight);
     }
 
     /**
