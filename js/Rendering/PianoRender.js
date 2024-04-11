@@ -11,7 +11,8 @@ export class PianoRender {
         this.renderDimensions.registerResizeCallback(this.resize.bind(this));
         this.clickCallback = null;
         this.blackKeyImg = new Image();
-        this.blackKeyImg.src = "../../images/blackKey.svg";
+        //request.open("GET", "./js/audio/metronome/1.wav");
+        this.blackKeyImg.src = "../images/blackKey.svg";
         this.blackKeyImg.onload;
         this.positionY = 50; //from bottom
         this.count = 0;
