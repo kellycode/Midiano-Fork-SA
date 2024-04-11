@@ -49,7 +49,7 @@ export class UI {
         this.fullscreenButton = document.getElementById("fullscreenButton");
         this.settingsButton = document.getElementById("settingsButton");
 
-        this.defaultPLayerVolume = 75;
+        this.defaultPLayerVolume = 100;
 
         //add callbacks to the player
         getPlayer().newSongCallbacks.push(this.newSongCallback.bind(this));

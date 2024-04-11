@@ -4,6 +4,7 @@ import { InputListeners } from "./InputListeners.js";
 import { getPlayer, getPlayerState } from "./player/Player.js";
 import { loadJson } from "./Util.js";
 import { FileLoader } from "./player/FileLoader.js";
+import globalContext from "./globalContext.js";
 
 let ui;
 let loading;
@@ -18,6 +19,7 @@ window.onload = async function () {
 async function init() {
     render = new Render();
     ui = new UI(render);
+    globalContext.ui = ui;
     listeners = new InputListeners(ui, render);
 
     renderLoop();

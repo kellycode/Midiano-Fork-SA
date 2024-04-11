@@ -3,6 +3,7 @@ import { getCurrentSong, getPlayer } from "../player/Player.js"
 import { replaceAllString } from "../Util.js"
 import { DomHelper } from "./DomHelper.js"
 import { getLoader } from "./Loader.js"
+import globalContext from "../globalContext.js";
 
 export class SongUI {
 	constructor() {
@@ -74,7 +75,8 @@ function createUnloadedSongButton(songJson) {
 			getLoader().setLoadMessage("Downloading Song")
 			FileLoader.loadSongFromURL(songJson.url, respone => {
 				getPlayer().loadSong(respone, songJson.fileName, songJson.name)
-			})
+			});
+			globalContext.ui.toggleLoadedSongsDiv();
 		}
 	)
 	but.classList.add("songButton")
@@ -94,7 +96,7 @@ function loadedButtonClickCallback(song) {
 	let currentSong = getCurrentSong()
 	if (currentSong != song) {
 		DomHelper.removeClassFromElementsSelector(".songButton", "selected")
-		DomHelper.addClassToElement("selected", song.div)
-		getPlayer().setSong(song)
+		DomHelper.addClassToElement("selected", song.div);
+		getPlayer().setSong(song);
 	}
 }

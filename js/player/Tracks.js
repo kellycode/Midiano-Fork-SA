@@ -24,6 +24,9 @@ export const setupTracks = activeTracks => {
 				index: trackId
 			}
 		}
+		console.log(theTracks[trackId].color)
+		console.log(trackId)
+		console.log(trackId % 4)
 		theTracks[trackId].color = CONST.TRACK_COLORS[trackId % 4]
 	}
 }
