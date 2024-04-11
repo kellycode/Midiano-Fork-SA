@@ -12,7 +12,7 @@ export class PianoRender {
         this.clickCallback = null;
         this.blackKeyImg = new Image();
         //request.open("GET", "./js/audio/metronome/1.wav");
-        this.blackKeyImg.src = "../images/blackKey.svg";
+        this.blackKeyImg.src = "./js/Rendering/images/blackKey.svg";
         this.blackKeyImg.onload;
         this.positionY = 50; //from bottom
         this.count = 0;
