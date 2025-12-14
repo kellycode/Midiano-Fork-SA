@@ -10,6 +10,7 @@ let ui;
 let loading;
 let listeners;
 let examplesJson;
+let parsedJson;
 
 window.onload = async function () {
     await init();
@@ -25,12 +26,15 @@ async function init() {
     renderLoop();
 
     loadJson("./js/data/exampleSongs.json", (json) => {
-        let parsedJson = JSON.parse(json);
+        parsedJson = JSON.parse(json);
+
+        FileLoader.parsedJson = parsedJson;
+        
         ui.setExampleSongs(parsedJson)
         loadStartingSong(parsedJson);
     });
 
-    
+
 }
 
 let render;
@@ -40,8 +44,30 @@ function renderLoop() {
     window.requestAnimationFrame(renderLoop);
 }
 async function loadStartingSong(parsedJson) {
+
+    let loadNumber = 0;
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    const result = getCookie('last_midi_loaded');
+
+    if (result) {
+        let midiData = parsedJson.find(object => object.name === result);
+        loadNumber = midiData.item;
+        console.log(loadNumber);
+    } else {
+        console.log("No midi cookie found, loading default");
+    }
+
+
+
     const domain = window.location.href;
-    // always start with the first song listed in exampleSongs.json
-    let url = parsedJson[0].url;
-    FileLoader.loadSongFromURL(url, (response, fileName) => getPlayer().loadSong(response, fileName, parsedJson[0].name));
+    // always start with the the last midi loaded or the first item in the list if no cookie found
+    let url = parsedJson[loadNumber].url;
+    FileLoader.loadSongFromURL(url, (response, fileName) => getPlayer().loadSong(response, fileName, parsedJson[loadNumber].name));
 }

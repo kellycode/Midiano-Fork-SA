@@ -1,57 +1,74 @@
 [
     {
+        "item": 0,
         "name": "The Entertainer",
         "fileName": "The Entertainer.mid",
         "url": "./midi/The Entertainer.mid?raw=true"
     },
     {
+        "item": 1,
         "name": "The Ash Grove",
         "fileName": "The Ash Grove.mid",
         "url": "./midi/The Ash Grove.mid?raw=true"
     },
     {
+        "item": 2,
         "name": "Passacaglia",
         "fileName": "Passacaglia.mid",
         "url": "./midi/Passacaglia.mid?raw=true"
     },
     {
+        "item": 3,
         "name": "A Spring Without You",
         "fileName": "A Spring Without You.mid",
         "url": "./midi/A Spring Without You.mid?raw=true"
     },
     {
+        "item": 4,
         "name": "Dragonborn",
         "fileName": "Dragonborn-Export-Piano.mid",
         "url": "./midi/Dragonborn-Export-Piano.mid?raw=true"
     },
     {
+        "item": 5,
         "name": "Christmas Time is Here",
         "fileName": "Christmas Time Is Here.mid",
         "url": "./midi/Christmas Time Is Here.mid?raw=true"
     },
     {
+        "item": 6,
         "name": "Liszt - La Campanella",
         "fileName": "liz_et3.mid",
         "url": "./midi/liz_et3.mid?raw=true"
     },
     {
+        "item": 7,
         "name": "Bach - Prelude and Fugue BWV 846",
         "fileName": "bach_846.mid",
         "url": "./midi/bach_846.mid?raw=true"
     },
     {
+        "item": 8,
         "name": "Christmas Time Is Here",
         "fileName": "xmastime.mid",
         "url": "./midi/xmastime.mid?raw=true"
     },
     {
+        "item": 9,
         "name": "Linus and Lucy",
         "fileName": "Linus and Lucy.mid",
         "url": "./midi/Linus and Lucy.mid?raw=true"
     },
     {
+        "item": 10,
         "name": "Mac's Boogie",
         "fileName": "Mac's Boogie.mid",
         "url": "./midi/Mac's Boogie.mid?raw=true"
+    },
+    {
+        "item": 11,
+        "name": "Radio Freedom",
+        "fileName": "Radio_Freedom_Violin_Score.mid",
+        "url": "./midi/Radio_Freedom_Violin_Score.mid?raw=true"
     }
 ]
