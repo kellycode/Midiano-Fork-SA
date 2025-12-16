@@ -90,7 +90,6 @@ export class UI {
         this.settingsButtonGroup = this.startSettingsButtonGroup();
 
         this.startSongControlButtonGroup();
-        this.startFileButtonGroup();
         this.startTracksButtonGroup();
 
         // zoom buttons added to the middleTopContainer
@@ -120,11 +119,6 @@ export class UI {
         }.bind(this);
 
         return speedButtonGroup;
-    }
-
-    startFileButtonGroup() {
-        this.hiddenFileInput.onchange = this.handleFileSelect.bind(this);
-        this.loadedSongsButton.onclick = this.toggleLoadedSongsDiv.bind(this);
     }
 
     toggleLoadedSongsDiv() {
@@ -171,14 +165,15 @@ export class UI {
                 this.showTracks();
             }
         };
+        this.loadedSongsButton.onclick = this.toggleLoadedSongsDiv.bind(this);
 
-        this.midiSetupButton.onclick = (ev) => {
-            if (this.midiSetupDialogShown) {
-                this.hideMidiSetupDialog();
-            } else {
-                this.showMidiSetupDialog();
-            }
-        };
+        // this.midiSetupButton.onclick = (ev) => {
+        //     if (this.midiSetupDialogShown) {
+        //         this.hideMidiSetupDialog();
+        //     } else {
+        //         this.showMidiSetupDialog();
+        //     }
+        // };
     }
 
     hideTracks() {
@@ -199,9 +194,9 @@ export class UI {
     }
 
     hideMidiSetupDialog() {
-        this.midiSetupButton.classList.remove("selected");
-        this.midiSetupDialogShown = false;
-        this.hideDiv(this.getMidiSetupDialog());
+        //this.midiSetupButton.classList.remove("selected");
+        //this.midiSetupDialogShown = false;
+        //this.hideDiv(this.getMidiSetupDialog());
     }
 
     showMidiSetupDialog() {
@@ -512,7 +507,7 @@ export class UI {
     }
 
     hideAllDialogs() {
-        this.hideMidiSetupDialog();
+        //this.hideMidiSetupDialog();
         this.hideSettings();
         this.hideLoadedSongsDiv();
         this.hideTracks();

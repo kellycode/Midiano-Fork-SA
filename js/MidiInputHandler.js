@@ -8,28 +8,28 @@ class MidiInputHandler {
 		this.init()
 	}
 	init() {
-		if (navigator.requestMIDIAccess)
-			navigator
-				.requestMIDIAccess()
-				.then(this.onMIDIInit.bind(this), this.onMIDIReject.bind(this))
-		else
-			alert(
-				"No MIDI support present in your browser.  Check https://developer.mozilla.org/en-US/docs/Web/API/MIDIAccess#Browser_compatibility to see which Browsers support this feature."
-			)
+		// if (navigator.requestMIDIAccess)
+		// 	navigator
+		// 		.requestMIDIAccess()
+		// 		.then(this.onMIDIInit.bind(this), this.onMIDIReject.bind(this))
+		// else
+		// 	alert(
+		// 		"No MIDI support present in your browser.  Check https://developer.mozilla.org/en-US/docs/Web/API/MIDIAccess#Browser_compatibility to see which Browsers support this feature."
+		// 	)
 	}
 	getAvailableInputDevices() {
-		try {
-			return Array.from(this.midiAccess.inputs.values())
-		} catch (e) {
+		//try {
+			//return Array.from(this.midiAccess.inputs.values())
+		//} catch (e) {
 			return []
-		}
+		//}
 	}
 	getAvailableOutputDevices() {
-		try {
-			return Array.from(this.midiAccess.outputs.values())
-		} catch (e) {
+		//try {
+			//return Array.from(this.midiAccess.outputs.values())
+		//} catch (e) {
 			return []
-		}
+		//}
 	}
 	setNoteOnCallback(callback) {
 		this.noteOnCallback = callback
