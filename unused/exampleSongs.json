@@ -70,5 +70,17 @@
         "name": "Radio Freedom",
         "fileName": "Radio_Freedom_Violin_Score.mid",
         "url": "./midi/Radio_Freedom_Violin_Score.mid?raw=true"
+    },
+    {
+        "item": 12,
+        "name": "The Show Goes On 1",
+        "fileName": "The Show Goes On 1.mid",
+        "url": "./midi/The Show Goes On 1.mid?raw=true"
+    },
+    {
+        "item": 12,
+        "name": "The Show Goes On Solo",
+        "fileName": "The Show Goes On Solo.mid",
+        "url": "./midi/The Show Goes On Solo.mid?raw=true"
     }
 ]

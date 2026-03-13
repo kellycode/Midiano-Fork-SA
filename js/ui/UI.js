@@ -166,14 +166,6 @@ export class UI {
             }
         };
         this.loadedSongsButton.onclick = this.toggleLoadedSongsDiv.bind(this);
-
-        // this.midiSetupButton.onclick = (ev) => {
-        //     if (this.midiSetupDialogShown) {
-        //         this.hideMidiSetupDialog();
-        //     } else {
-        //         this.showMidiSetupDialog();
-        //     }
-        // };
     }
 
     hideTracks() {

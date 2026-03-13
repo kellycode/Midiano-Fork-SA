@@ -25,16 +25,26 @@ async function init() {
 
     renderLoop();
 
-    loadJson("./js/data/exampleSongs.json", (json) => {
-        parsedJson = JSON.parse(json);
+    loadJson("./js/data/exampleSongsList.json", (json) => {
+        let midis = JSON.parse(json);
+        let formatted = [];
 
-        FileLoader.parsedJson = parsedJson;
-        
-        ui.setExampleSongs(parsedJson)
-        loadStartingSong(parsedJson);
+        for (let i = 0; i < midis.length; i++) {
+            let mObject = {};
+
+            mObject.item = i;
+            mObject.name = midis[i];
+            mObject.fileName = midis[i] + ".mid";
+            mObject.url = "./midi/" + midis[i] + ".mid?raw=true";
+
+            formatted.push(mObject);
+        }
+
+        FileLoader.parsedJson = formatted;
+
+        ui.setExampleSongs(formatted)
+        loadStartingSong(formatted);
     });
-
-
 }
 
 let render;
@@ -47,6 +57,7 @@ async function loadStartingSong(parsedJson) {
 
     let loadNumber = 0;
 
+    // see if there's a cookie for the last song loaded
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -59,7 +70,6 @@ async function loadStartingSong(parsedJson) {
     if (result) {
         let midiData = parsedJson.find(object => object.name === result);
         loadNumber = midiData.item;
-        console.log(loadNumber);
     } else {
         console.log("No midi cookie found, loading default");
     }

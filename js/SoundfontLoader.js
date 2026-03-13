@@ -66,9 +66,9 @@ export class SoundfontLoader {
 		for (let soundfontName in MIDI) {
 			for (let instrument in MIDI[soundfontName]) {
 				if (!hasBuffer(soundfontName, instrument)) {
-					console.log(
-						"Loaded '" + soundfontName + "' instrument : " + instrument
-					)
+					// console.log(
+					// 	"Loaded '" + soundfontName + "' instrument : " + instrument
+					// )
 					for (let noteKey in MIDI[soundfontName][instrument]) {
 						let base64Buffer = SoundfontLoader.getBase64Buffer(
 							MIDI[soundfontName][instrument][noteKey]

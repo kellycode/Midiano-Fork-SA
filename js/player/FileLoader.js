@@ -7,13 +7,14 @@ export class FileLoader {
 
 
     static async loadSongFromURL(url, callback) {
+        console.log(url);
 
         function setCookie(url, parsedJson) {
             // Set a cookie that expires in 365 days and is available across the entire website
             const name = "last_midi_loaded";
             //console.log(parsedJson)
             const lastMidiNameLoaded = parsedJson.find(object => object.url === url);
-            console.log(lastMidiNameLoaded)
+            //console.log(lastMidiNameLoaded)
             const value = lastMidiNameLoaded.name;
             const days = 365;
 

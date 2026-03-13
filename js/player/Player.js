@@ -40,7 +40,6 @@ class Player {
 
         this.playbackSpeed = 1;
 
-        console.log("Player created.");
         this.playTick();
     }
     /*KK TODO Handle this.playing to stop rendering when not playing*/
@@ -366,7 +365,7 @@ class Player {
 
     pause() {
         // double calls onload
-        console.log("Pausing Song");
+        //console.log("Pausing Song");
         this.pauseTime = this.getTime();
         this.paused = true;
     }

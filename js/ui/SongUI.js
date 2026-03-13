@@ -59,7 +59,9 @@ function createLoadedSongDiv(song) {
 	)
 	let button = createLoadedSongButton(song)
 	song.div = button
-	wrapper.appendChild(song.div)
+
+	// this was adding the selected song to the list
+	//wrapper.appendChild(song.div)
 
 	return {
 		wrapper: wrapper,
