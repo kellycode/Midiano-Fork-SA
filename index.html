@@ -37,33 +37,27 @@
 <body>
 	<nav id="MainNavBar" class="navbar navbar-wrapper">
 		<div class="container">
-
 			<div id="leftTopContainer" class="topContainer">
 				<div id="speedButtonGroup" class="btn-group btn-group-vertical align-middle" role="group">
-					<button id="speedUpButton" type="button" class="btn btn-default btn-xs forcedThinButton"
-						title="Increase Speed">
-						<div class="btn-select-line"></div>
-						<span class="glyphicon glyphicon-triangle-top"></span>
-					</button>
 					<input id="speedDisplayInput" class="forcedThinButton" type="text"
 						style="float: none; text-align: center;">
-					<button id="speedDownButton" type="button" class="btn btn-default btn-xs forcedThinButton"
-						title="Decrease Speed">
+					<button id="muteButton" type="button" class="btn btn-default glyphicon glyphicon-volume-up">
 						<div class="btn-select-line"></div>
-						<span class="glyphicon glyphicon-triangle-bottom"></span>
 					</button>
 				</div>
 				<div id="volumeButtonGroup" class="btn-group btn-group-vertical align-middle" role="group">
 					<div id="volumeSliderContainer" class="sliderContainer">
-						<label id="volumeSliderlabel" class="sliderLabel">
+						<label id="volumeSliderlabel" for="volumeSlider" class="sliderLabel">
 							Master Volume
 						</label>
 						<input id="volumeSlider" type="range" min="0" max="100" step="1">
 					</div>
-					<button id="muteButton" type="button" class="btn btn-default glyphicon glyphicon-volume-up">
-						<div class="btn-select-line"></div>
-						<!-- <span class="glyphicon glyphicon-volume-up"></span> -->
-					</button>
+					<div id="speedSliderContainer" class="sliderContainer">
+						<label id="speedSliderlabel" for="speedSlider" class="sliderLabel">
+							Playback Speed
+						</label>
+						<input id="speedSlider" type="range" min="0" max="100" step="1">
+					</div>
 				</div>
 				<div id="settingsButtonGroup" class="btn-group btn-group-vertical" role="group">
 					<button id="fullscreenButton" type="button" class="btn btn-default">
@@ -76,8 +70,6 @@
 					</button>
 				</div>
 			</div>
-
-
 			<div id="middleTopContainer" class="topContainer zoomAddAdjustment">
 				<div style="width: auto; height: 100%;">
 					<div id="songControlGroup" class="btn-group align-middle" role="group">
@@ -98,18 +90,6 @@
 			</div>
 
 			<div id="rightTopContainer" class="topContainer">
-				<div id="fileButtonGroup" class="btn-group btn-group-vertical align-middle" role="group">
-					<!-- <label id="uploadMidiButton" class="btn btn-default btn-file floatSpanLeft">
-						<span class="glyphicon glyphicon-folder-open"></span>
-						Upload Midi
-						<input id="hiddenFileInput" type="file" style="display: none;">
-					</label> -->
-					<!-- <button id="loadedSongsButton" type="button" class="btn btn-default">
-						<div class="btn-select-line"></div>
-						<span class="glyphicon glyphicon-music"></span>
-						Loaded Songs
-					</button> -->
-				</div>
 				<div id="tracksButtonGroup" class="btn-group btn-group-vertical align-middle" role="group">
 					<button id="tracksButton" type="button" class="btn btn-default floatSpanLeft">
 						<div class="btn-select-line"></div>
@@ -121,11 +101,6 @@
 						<span class="glyphicon glyphicon-music"></span>
 						Loaded Songs
 					</button>
-					<!-- <button id="midiSetupButton" type="button" class="btn btn-default floatSpanLeft">
-						<div class="btn-select-line"></div>
-						<span class="glyphicon glyphicon-cog"></span>
-						Midi
-					</button> -->
 				</div>
 				<div id="zoomButtonGroup" class="zoomGroup btn-group">
 					<button id="zoomInButton" type="button" class="btn btn-default zoom-btn">
@@ -154,13 +129,7 @@
 					</button>
 				</div>
 			</div>
-
-
-
-
-
 		</div>
 	</nav>
 </body>
-
 </html>

@@ -92,6 +92,11 @@ class Player {
     }
     increaseSpeed(val) {
         this.playbackSpeed = Math.max(0, Math.round((this.playbackSpeed + val) * 100) / 100);
+        console.log(this.playbackSpeed)
+    }
+    setPlaybackSpeed(val) {
+        // playbackSpeed/val should be between 0 and 1
+        this.playbackSpeed = val;
     }
     getChannel(track) {
         if (this.song.activeTracks[track].notes.length) {

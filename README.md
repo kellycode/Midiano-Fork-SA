@@ -1,7 +1,7 @@
 My fork is just for my personal use of this very cool tool.  I'm a pro web dev and keyboard player and changing things to suit m'self. Cheers!
 Original at [MIDIano](https://github.com/Bewelge/MIDIano)
 
-# Midiano (Original Source)
+# Midiano (Original ReadMe)
 
 ## A JavaScript MIDI-Player/ Piano-learning webapp
 

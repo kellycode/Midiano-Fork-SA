@@ -41,15 +41,15 @@ export class UI {
         this.volumeSliderlabel = document.getElementById("volumeSliderlabel");
 
         this.speedButtonGroup = document.getElementById("speedButtonGroup");
-        this.speedUpButton = document.getElementById("speedUpButton");
         this.speedDisplayInput = document.getElementById("speedDisplayInput");
-        this.speedDownButton = document.getElementById("speedDownButton");
+        this.speedSlider = document.getElementById("speedSlider");
 
         this.settingsButtonGroup = document.getElementById("settingsButtonGroup");
         this.fullscreenButton = document.getElementById("fullscreenButton");
         this.settingsButton = document.getElementById("settingsButton");
 
         this.defaultPLayerVolume = 100;
+        this.defaultPLayerSpeed = 100;
 
         //add callbacks to the player
         getPlayer().newSongCallbacks.push(this.newSongCallback.bind(this));
@@ -106,15 +106,11 @@ export class UI {
     }
 
     startSpeedButtonGroup() {
-        this.speedUpButton.onclick = function () {
-            getPlayer().increaseSpeed(0.05);
-            this.updateSpeedDisplayValue();
-        }.bind(this);
-
         this.speedDisplayInput.value = Math.floor(getPlayer().playbackSpeed * 100) + "%";
 
-        this.speedDownButton.onclick = function () {
-            getPlayer().increaseSpeed(-0.05);
+        this.speedSlider.onchange = function(ev) {
+            let intVal = parseInt(ev.target.value);
+            getPlayer().setPlaybackSpeed(intVal/100);
             this.updateSpeedDisplayValue();
         }.bind(this);
 
@@ -231,7 +227,10 @@ export class UI {
     startVolumeButtonGroup() {
         // set the default volume
         this.volumeSlider.value = this.defaultPLayerVolume;
+        this.speedSlider.value = this.defaultPLayerSpeed;
+
         getPlayer().volume = this.defaultPLayerVolume;
+
         this.updateVolumeSlider();
 
         this.toggleMuteClass = (oldIcon, newIcon) => {

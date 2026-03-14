@@ -326,6 +326,7 @@ export class Render {
         return (height * this.renderDimensions.getNoteToHeightConst()) / (this.renderDimensions.windowHeight - this.renderDimensions.whiteKeyHeight) / 1000;
     }
     onMenuHeightChanged(menuHeight) {
+        return;
         this.renderDimensions.menuHeight = menuHeight;
         this.pianoRender.repositionCanvases();
         this.getProgressBarCanvas().style.top = menuHeight + "px";

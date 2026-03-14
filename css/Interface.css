@@ -42,7 +42,6 @@ body {
 
 .navbar {
     box-sizing: border-box;
-    /* transition: all 0.4s ease-out; */
     max-height: 150px;
     background-color: black;
     border: 3px ridge #000;
